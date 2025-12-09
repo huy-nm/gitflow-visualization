@@ -4,12 +4,15 @@ import './theme/theme.css'
 import UseCasePanel from './components/UseCasePanel'
 import UseCaseCard from './components/UseCaseCard'
 import { useCasesByCategory } from './useCases'
+import { useTranslation, LANGUAGES } from './i18n'
 
 function App() {
+  const { t, language, setLanguage } = useTranslation()
   const [selectedUseCase, setSelectedUseCase] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [showLegend, setShowLegend] = useState(false)
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false)
   const [activeCategory, setActiveCategory] = useState('beginner')
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
@@ -52,28 +55,63 @@ function App() {
           <div className="flex items-center gap-3">
             <span className="text-3xl drop-shadow-sm animate-[float_3s_ease-in-out_infinite]">🌊</span>
             <h1 className="text-2xl font-extrabold m-0 bg-gradient-to-br from-ctp-blue via-ctp-mauve to-ctp-peach bg-clip-text text-transparent tracking-tight">
-              GitFlow Visualizer
+              {t('app.title')}
             </h1>
           </div>
           <p className="hidden md:block text-sm font-medium text-[var(--text-secondary)] m-0">
-            Interactive guide to understanding GitFlow branching model
+            {t('app.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {/* Language Switcher */}
+          <div className="relative">
+            <button 
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-mauve hover:text-ctp-mauve hover:-translate-y-0.5 shadow-sm hover:shadow-md ${showLanguageMenu ? '!border-ctp-mauve !text-ctp-mauve bg-[var(--bg-card-hover)]' : ''}`}
+              onClick={() => setShowLanguageMenu(!showLanguageMenu)} 
+              title="Change Language"
+            >
+              {LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.name}
+            </button>
+            
+            {/* Language Menu */}
+            {showLanguageMenu && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                {LANGUAGES.map(lang => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code)
+                      setShowLanguageMenu(false)
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-left border-none bg-transparent cursor-pointer transition-all ${
+                      language === lang.code 
+                        ? 'bg-ctp-mauve/20 text-ctp-mauve font-semibold' 
+                        : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
+                    }`}
+                  >
+                    <span className="text-xl">{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Branch Types */}
           <div className="relative">
             <button 
               className={`flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-blue hover:text-ctp-blue hover:-translate-y-0.5 shadow-sm hover:shadow-md ${showLegend ? '!border-ctp-blue !text-ctp-blue bg-[var(--bg-card-hover)]' : ''}`}
               onClick={() => setShowLegend(!showLegend)} 
               title="Show Branch Types"
             >
-              Branch Types ℹ️
+              {t('app.branchTypes')} ℹ️
             </button>
             
             {/* Legend Popover */}
             {showLegend && (
               <div className="absolute right-0 top-full mt-3 w-80 bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl shadow-xl p-5 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-color)]">
-                  <h3 className="m-0 text-base font-bold text-[var(--text-primary)]">Branch Types</h3>
+                  <h3 className="m-0 text-base font-bold text-[var(--text-primary)]">{t('app.branchTypes')}</h3>
                   <button 
                     className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-secondary)] hover:bg-ctp-surface0 hover:text-[var(--text-primary)] transition-colors border-none bg-transparent cursor-pointer" 
                     onClick={() => setShowLegend(false)}
@@ -86,55 +124,48 @@ function App() {
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-green text-ctp-green"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">main</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">Production-ready code</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.main')}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-blue text-ctp-blue"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">develop</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">Integration branch</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.develop')}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-lavender text-ctp-lavender"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">feature/*</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">New features</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.feature')}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-mauve text-ctp-mauve"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">release/*</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">Release prep</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.release')}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-red text-ctp-red"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">hotfix/*</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">Production fixes</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.hotfix')}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
                     <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-peach text-ctp-peach"></div>
                     <div className="flex flex-col gap-0.5">
                       <strong className="font-mono text-sm text-[var(--text-primary)]">bugfix/*</strong>
-                      <span className="text-xs text-[var(--text-secondary)]">Dev bug fixes</span>
+                      <span className="text-xs text-[var(--text-secondary)]">{t('branches.bugfix')}</span>
                     </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
-          {/* <button 
-            className="w-12 h-12 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] cursor-pointer text-xl flex items-center justify-center transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-lavender hover:-translate-y-0.5 shadow-sm hover:shadow-md"
-            onClick={toggleTheme} 
-            title="Toggle theme"
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button> */}
         </div>
       </header>
       
@@ -163,10 +194,10 @@ function App() {
           <div className="flex-1 flex flex-col items-center p-8 overflow-y-auto gap-8">
             <div className="max-w-2xl text-center">
               <h2 className="text-4xl sm:text-5xl font-extrabold m-0 mb-4 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent -tracking-[0.02em]">
-                Welcome to GitFlow Visualizer! 👋
+                {t('app.welcome')}
               </h2>
               <p className="text-[var(--text-secondary)] text-lg m-0 leading-relaxed">
-                Select a workflow below to see an interactive visualization of the GitFlow branching model.
+                {t('app.welcomeDescription')}
               </p>
             </div>
             

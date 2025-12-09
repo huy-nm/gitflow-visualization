@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "GitFlow Visualizer",
+    "subtitle": "Interactive guide to understanding GitFlow branching model",
+    "welcome": "Welcome to GitFlow Visualizer! 👋",
+    "welcomeDescription": "Select a workflow below to see an interactive visualization of the GitFlow branching model.",
+    "branchTypes": "Branch Types"
+  },
+  "categories": {
+    "beginner": {
+      "title": "🟢 Beginner",
+      "description": "Learn Git basics step by step"
+    },
+    "intermediate": {
+      "title": "🟡 Intermediate",
+      "description": "Team collaboration workflows"
+    },
+    "senior": {
+      "title": "🔴 Senior",
+      "description": "Advanced Git techniques"
+    },
+    "realWorld": {
+      "title": "🏢 Real-World",
+      "description": "Production team scenarios"
+    }
+  },
+  "panel": {
+    "backToUseCases": "Back to use cases",
+    "whatsHappening": "What's Happening",
+    "theCommand": "The Command",
+    "result": "Result",
+    "reset": "Reset",
+    "previous": "Previous",
+    "next": "Next",
+    "play": "Play",
+    "pause": "Pause"
+  },
+  "branches": {
+    "main": "Production-ready code",
+    "develop": "Integration branch",
+    "feature": "New features",
+    "release": "Release prep",
+    "hotfix": "Production fixes",
+    "bugfix": "Dev bug fixes"
+  },
+  "languages": {
+    "en": "English",
+    "vi": "Tiếng Việt",
+    "ja": "日本語"
+  }
+}

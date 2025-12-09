@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "GitFlow Visualizer",
+    "subtitle": "Hướng dẫn tương tác để hiểu mô hình nhánh GitFlow",
+    "welcome": "Chào mừng đến với GitFlow Visualizer! 👋",
+    "welcomeDescription": "Chọn một quy trình bên dưới để xem trực quan hóa tương tác của mô hình nhánh GitFlow.",
+    "branchTypes": "Loại Nhánh"
+  },
+  "categories": {
+    "beginner": {
+      "title": "🟢 Cơ bản",
+      "description": "Học Git từ đầu từng bước một"
+    },
+    "intermediate": {
+      "title": "🟡 Trung cấp",
+      "description": "Quy trình làm việc nhóm"
+    },
+    "senior": {
+      "title": "🔴 Nâng cao",
+      "description": "Kỹ thuật Git chuyên sâu"
+    },
+    "realWorld": {
+      "title": "🏢 Thực tế",
+      "description": "Kịch bản team production"
+    }
+  },
+  "panel": {
+    "backToUseCases": "Quay lại danh sách",
+    "whatsHappening": "Đang Xảy Ra",
+    "theCommand": "Lệnh Git",
+    "result": "Kết Quả",
+    "reset": "Đặt lại",
+    "previous": "Trước",
+    "next": "Sau",
+    "play": "Phát",
+    "pause": "Dừng"
+  },
+  "branches": {
+    "main": "Code sẵn sàng production",
+    "develop": "Nhánh tích hợp",
+    "feature": "Tính năng mới",
+    "release": "Chuẩn bị release",
+    "hotfix": "Sửa lỗi production",
+    "bugfix": "Sửa lỗi dev"
+  },
+  "languages": {
+    "en": "English",
+    "vi": "Tiếng Việt",
+    "ja": "日本語"
+  }
+}
