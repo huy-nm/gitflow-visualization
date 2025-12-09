@@ -127,13 +127,13 @@ function App() {
               </div>
             )}
           </div>
-          <button 
+          {/* <button 
             className="w-12 h-12 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] cursor-pointer text-xl flex items-center justify-center transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-lavender hover:-translate-y-0.5 shadow-sm hover:shadow-md"
             onClick={toggleTheme} 
             title="Toggle theme"
           >
             {theme === 'light' ? '🌙' : '☀️'}
-          </button>
+          </button> */}
         </div>
       </header>
       
