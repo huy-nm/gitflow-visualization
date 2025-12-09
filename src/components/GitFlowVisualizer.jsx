@@ -11,6 +11,21 @@ import './FlowNodes.css'
 import './GitFlowVisualizer.css'
 import { nodeTypes, edgeTypes, BRANCH_COLORS } from './FlowNodes'
 
+// ============================================
+// LAYOUT CONFIGURATION - Adjust these values
+// ============================================
+const LAYOUT = {
+  VERTICAL_SPACING: 50,    // Space between branches (Y axis)
+  HORIZONTAL_SPACING: 60,  // Space between commits (X axis)
+  FIRST_COMMIT_X: 150,     // X position of first commit column
+  INITIAL_CURRENT_X: 140,  // Starting X position tracker
+  DELETED_LABEL_OPACITY: 0.3,  // Opacity for deleted branch labels
+  DELETED_NODE_OPACITY: 0.1,   // Opacity for deleted nodes and edges
+  VIEWPORT_PADDING_X: 50,  // Left padding from edge of view
+  VIEWPORT_PADDING_Y: 70,  // Top padding from edge of view
+  DEFAULT_ZOOM: 1.5,       // Initial zoom level
+}
+
 function getBranchType(branchName) {
   if (branchName === 'main' || branchName === 'master') return 'main'
   if (branchName === 'develop') return 'develop'
@@ -31,10 +46,11 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     
     const newNodes = []
     const newEdges = []
-    const branchYPositions = { main: 0, develop: 40 }
-    let nextY = 80
-    let currentX = 140
-    const nodeSpacing = 80
+    const branchYPositions = { main: 0, develop: LAYOUT.VERTICAL_SPACING }
+    let nextY = LAYOUT.VERTICAL_SPACING * 2
+    let currentX = LAYOUT.INITIAL_CURRENT_X
+    const nodeSpacing = LAYOUT.HORIZONTAL_SPACING
+    const firstCommitX = LAYOUT.FIRST_COMMIT_X
     
     // Track commits per branch for connections
     const branchCommits = {
@@ -43,7 +59,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     }
     
     // Track the rightmost X position for each branch
-    const branchEndX = { main: 80, develop: 130 }
+    const branchEndX = { main: firstCommitX, develop: firstCommitX + nodeSpacing }
     
     const mainType = getBranchType('main')
     const devType = getBranchType('develop')
@@ -64,7 +80,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     })
     
     // Initial commits - spaced for nice curves
-    const firstCommitX = 150
     
     newNodes.push({
       id: 'init-main',
@@ -144,7 +159,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
             })
           }
           
-          nextY += 40
+          nextY += LAYOUT.VERTICAL_SPACING
           currentX = Math.max(currentX, branchStartX + nodeSpacing)
           break
         }
@@ -260,7 +275,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           const labelNode = newNodes.find(n => n.id === `label-${step.branch}`)
           if (labelNode) {
             labelNode.data = { ...labelNode.data, deleted: true }
-            labelNode.style = { opacity: 0.4 }
+            labelNode.style = { opacity: LAYOUT.DELETED_LABEL_OPACITY }
           }
           
           // Gray out all commit nodes on this branch
@@ -268,14 +283,14 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           newNodes.forEach(node => {
             if (branchNodeIds.includes(node.id)) {
               node.data = { ...node.data, deleted: true }
-              node.style = { ...node.style, opacity: 0.4 }
+              node.style = { ...node.style, opacity: LAYOUT.DELETED_NODE_OPACITY }
             }
           })
           
           // Gray out all edges connected to this branch's nodes
           newEdges.forEach(edge => {
             if (branchNodeIds.includes(edge.source) || branchNodeIds.includes(edge.target)) {
-              edge.style = { ...edge.style, opacity: 0.4 }
+              edge.style = { ...edge.style, opacity: LAYOUT.DELETED_NODE_OPACITY }
             }
           })
           break
@@ -308,7 +323,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          defaultViewport={{ x: 50, y: 50, zoom: 1.5 }}
+          defaultViewport={{ x: LAYOUT.VIEWPORT_PADDING_X, y: LAYOUT.VIEWPORT_PADDING_Y, zoom: LAYOUT.DEFAULT_ZOOM }}
           minZoom={0.4}
           maxZoom={2}
           proOptions={{ hideAttribution: true }}

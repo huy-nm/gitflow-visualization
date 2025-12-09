@@ -88,8 +88,7 @@ export const BranchLabelNode = memo(({ data }) => {
         fontFamily: "'JetBrains Mono', monospace",
         color: '#4c4f69',
         whiteSpace: 'nowrap',
-        opacity: data.deleted ? 0.4 : 1,
-        minWidth: '80px'
+        opacity: data.deleted ? 0.4 : 1
       }}
     >
       <span style={{ 
