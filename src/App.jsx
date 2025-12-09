@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react'
 import './theme/theme.css'
 import UseCasePanel from './components/UseCasePanel'
 import UseCaseCard from './components/UseCaseCard'
-import { allUseCases as useCases } from './useCases'
+import { useCasesByCategory } from './useCases'
 
 function App() {
   const [selectedUseCase, setSelectedUseCase] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [showLegend, setShowLegend] = useState(false)
+  const [activeCategory, setActiveCategory] = useState('beginner')
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
@@ -159,7 +160,7 @@ function App() {
             />
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center p-8 overflow-y-auto gap-12">
+          <div className="flex-1 flex flex-col items-center p-8 overflow-y-auto gap-8">
             <div className="max-w-2xl text-center">
               <h2 className="text-4xl sm:text-5xl font-extrabold m-0 mb-4 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent -tracking-[0.02em]">
                 Welcome to GitFlow Visualizer! 👋
@@ -169,9 +170,32 @@ function App() {
               </p>
             </div>
             
+            {/* Category Tabs */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {Object.entries(useCasesByCategory).map(([key, category]) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveCategory(key)}
+                  className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-200 border-2 ${
+                    activeCategory === key
+                      ? 'bg-gradient-to-r from-ctp-blue to-ctp-mauve text-white border-transparent shadow-lg scale-105'
+                      : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-ctp-blue hover:text-ctp-blue hover:-translate-y-0.5'
+                  }`}
+                >
+                  <span className="mr-2">{category.title.split(' ')[0]}</span>
+                  <span>{category.title.split(' ').slice(1).join(' ')}</span>
+                </button>
+              ))}
+            </div>
+            
+            {/* Category Description */}
+            <p className="text-[var(--text-muted)] text-sm m-0">
+              {useCasesByCategory[activeCategory]?.description}
+            </p>
+            
             {/* Card Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl px-4">
-              {useCases.map(useCase => (
+              {useCasesByCategory[activeCategory]?.useCases.map(useCase => (
                 <UseCaseCard
                   key={useCase.id}
                   useCase={useCase}
