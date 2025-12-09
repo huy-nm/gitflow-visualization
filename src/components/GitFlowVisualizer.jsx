@@ -1,25 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  useNodesState,
+  useEdgesState
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
+import './FlowNodes.css'
 import './GitFlowVisualizer.css'
-
-// Catppuccin Latte branch colors
-const BRANCH_COLORS = {
-  main: '#40a02b',     // green
-  develop: '#1e66f5',  // blue
-  feature: '#8839ef',  // mauve
-  release: '#fe640b',  // peach
-  hotfix: '#d20f39',   // red
-  bugfix: '#ea76cb'    // pink
-}
-
-function getBranchColor(branchName) {
-  if (branchName === 'main' || branchName === 'master') return BRANCH_COLORS.main
-  if (branchName === 'develop') return BRANCH_COLORS.develop
-  if (branchName.startsWith('feature/')) return BRANCH_COLORS.feature
-  if (branchName.startsWith('release/')) return BRANCH_COLORS.release
-  if (branchName.startsWith('hotfix/')) return BRANCH_COLORS.hotfix
-  if (branchName.startsWith('bugfix/')) return BRANCH_COLORS.bugfix
-  return '#6c6f85' // subtext0
-}
+import { nodeTypes, edgeTypes, BRANCH_COLORS } from './FlowNodes'
 
 function getBranchType(branchName) {
   if (branchName === 'main' || branchName === 'master') return 'main'
@@ -32,135 +22,270 @@ function getBranchType(branchName) {
 }
 
 function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) {
-  const [branches, setBranches] = useState([])
-  const [commits, setCommits] = useState([])
-  const [merges, setMerges] = useState([])
-  const [tags, setTags] = useState([])
-  const [animatingCommit, setAnimatingCommit] = useState(null)
-  const containerRef = useRef(null)
+  const [nodes, setNodes, onNodesChange] = useNodesState([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState([])
   
-  // Reset when use case changes
+  // Generate nodes and edges based on current step
   useEffect(() => {
-    setBranches([
-      { name: 'main', y: 50, commits: [{ id: 'initial-main', x: 50, message: 'Initial commit' }] },
-      { name: 'develop', y: 120, commits: [{ id: 'initial-develop', x: 80, message: 'Start development' }] }
-    ])
-    setCommits([])
-    setMerges([{ from: { x: 50, y: 50 }, to: { x: 80, y: 120 }, id: 'init-merge' }])
-    setTags([])
-    setAnimatingCommit(null)
-  }, [useCase.id])
-  
-  // Process steps
-  useEffect(() => {
-    if (currentStep < 0) return
-    
     const stepsToProcess = useCase.steps.slice(0, currentStep + 1)
-    const newBranches = [
-      { name: 'main', y: 50, commits: [{ id: 'initial-main', x: 50, message: 'Initial commit' }], deleted: false },
-      { name: 'develop', y: 120, commits: [{ id: 'initial-develop', x: 80, message: 'Start development' }], deleted: false }
-    ]
-    const newMerges = [{ from: { x: 50, y: 50 }, to: { x: 80, y: 120 }, id: 'init-merge' }]
-    const newTags = []
     
+    const newNodes = []
+    const newEdges = []
+    const branchYPositions = { main: 0, develop: 40 }
+    let nextY = 80
     let currentX = 140
-    const branchYPositions = { main: 50, develop: 120 }
-    let nextY = 190
+    const nodeSpacing = 80
     
+    // Track commits per branch for connections
+    const branchCommits = {
+      main: [],
+      develop: []
+    }
+    
+    // Track the rightmost X position for each branch
+    const branchEndX = { main: 80, develop: 130 }
+    
+    const mainType = getBranchType('main')
+    const devType = getBranchType('develop')
+    
+    // Branch labels
+    newNodes.push({
+      id: 'label-main',
+      type: 'branchLabel',
+      position: { x: 0, y: branchYPositions.main - 8 },
+      data: { label: 'main', branchType: mainType }
+    })
+    
+    newNodes.push({
+      id: 'label-develop',
+      type: 'branchLabel',
+      position: { x: 0, y: branchYPositions.develop - 8 },
+      data: { label: 'develop', branchType: devType }
+    })
+    
+    // Initial commits - spaced for nice curves
+    const firstCommitX = 150
+    
+    newNodes.push({
+      id: 'init-main',
+      type: 'commit',
+      position: { x: firstCommitX, y: branchYPositions.main },
+      data: { branchType: mainType }
+    })
+    branchCommits.main.push({ id: 'init-main', x: firstCommitX })
+    branchEndX.main = firstCommitX
+    
+    newNodes.push({
+      id: 'init-develop',
+      type: 'commit',
+      position: { x: firstCommitX + nodeSpacing, y: branchYPositions.develop },
+      data: { branchType: devType }
+    })
+    branchCommits.develop.push({ id: 'init-develop', x: firstCommitX + nodeSpacing })
+    branchEndX.develop = firstCommitX + nodeSpacing
+    
+    // Edge from main to develop (initial branch)
+    newEdges.push({
+      id: 'edge-init',
+      source: 'init-main',
+      target: 'init-develop',
+      type: 'branch',
+      style: { stroke: BRANCH_COLORS.develop, strokeWidth: 2 }
+    })
+    
+    // Set initial currentX
+    currentX = firstCommitX + nodeSpacing * 2
+    
+    // Process steps
     stepsToProcess.forEach((step, stepIndex) => {
+      const isCurrentStep = stepIndex === currentStep
+      
       switch (step.action) {
         case 'create-branch': {
-          const fromBranch = newBranches.find(b => b.name === step.from)
-          if (fromBranch) {
-            const lastCommit = fromBranch.commits[fromBranch.commits.length - 1]
-            branchYPositions[step.to] = nextY
-            newBranches.push({
-              name: step.to,
-              y: nextY,
-              commits: [{ id: `${step.to}-start`, x: currentX, message: `Branch from ${step.from}` }],
-              deleted: false
+          const branchType = getBranchType(step.to)
+          const color = BRANCH_COLORS[branchType] || '#6c6f85'
+          
+          branchYPositions[step.to] = nextY
+          branchCommits[step.to] = []
+          
+          // Add branch label
+          newNodes.push({
+            id: `label-${step.to}`,
+            type: 'branchLabel',
+            position: { x: 0, y: nextY - 8 },
+            data: { label: step.to, branchType }
+          })
+          
+          // Add first commit on new branch - at least firstCommitX for alignment
+          const commitId = `${step.to}-start`
+          const parentCommits = branchCommits[step.from] || []
+          const parentCommit = parentCommits[parentCommits.length - 1]
+          // Ensure minimum X is firstCommitX, but position for nice curve from parent
+          const branchStartX = Math.max(firstCommitX, parentCommit ? parentCommit.x + nodeSpacing : currentX)
+          
+          newNodes.push({
+            id: commitId,
+            type: 'commit',
+            position: { x: branchStartX, y: nextY },
+            data: { branchType, isActive: isCurrentStep }
+          })
+          branchCommits[step.to].push({ id: commitId, x: branchStartX })
+          branchEndX[step.to] = branchStartX
+          
+          // Curved edge from parent branch
+          if (parentCommit) {
+            newEdges.push({
+              id: `edge-create-${step.to}`,
+              source: parentCommit.id,
+              target: commitId,
+              type: 'branch',
+              style: { stroke: color, strokeWidth: 2 },
+              animated: isCurrentStep
             })
-            newMerges.push({
-              from: { x: lastCommit.x, y: fromBranch.y },
-              to: { x: currentX, y: nextY },
-              id: `create-${step.to}`
-            })
-            nextY += 70
-            currentX += 60
           }
+          
+          nextY += 40
+          currentX = Math.max(currentX, branchStartX + nodeSpacing)
           break
         }
+        
         case 'commit': {
-          const branch = newBranches.find(b => b.name === step.branch)
-          if (branch) {
-            const lastCommit = branch.commits[branch.commits.length - 1]
-            branch.commits.push({
-              id: `${step.branch}-${stepIndex}`,
-              x: currentX,
-              message: step.message
+          const branchType = getBranchType(step.branch)
+          const color = BRANCH_COLORS[branchType] || '#6c6f85'
+          const y = branchYPositions[step.branch] ?? 0
+          
+          const commitId = `commit-${stepIndex}`
+          const prevCommits = branchCommits[step.branch] || []
+          const prevCommit = prevCommits[prevCommits.length - 1]
+          
+          // Use previous commit X + spacing for consistent spacing
+          const commitX = prevCommit ? prevCommit.x + nodeSpacing : currentX
+          
+          newNodes.push({
+            id: commitId,
+            type: 'commit',
+            position: { x: commitX, y },
+            data: { branchType, isActive: isCurrentStep }
+          })
+          
+          if (!branchCommits[step.branch]) branchCommits[step.branch] = []
+          branchCommits[step.branch].push({ id: commitId, x: commitX })
+          branchEndX[step.branch] = commitX
+          
+          // Straight edge to previous commit on same branch
+          if (prevCommit) {
+            newEdges.push({
+              id: `edge-${commitId}`,
+              source: prevCommit.id,
+              target: commitId,
+              type: 'branch',
+              style: { stroke: color, strokeWidth: 3 },
+              animated: isCurrentStep
             })
-            currentX += 60
           }
+          
+          currentX = Math.max(currentX, commitX + nodeSpacing)
           break
         }
+        
         case 'merge': {
-          const fromBranch = newBranches.find(b => b.name === step.from)
-          const toBranch = newBranches.find(b => b.name === step.to)
-          if (fromBranch && toBranch) {
-            const fromCommit = fromBranch.commits[fromBranch.commits.length - 1]
-            toBranch.commits.push({
-              id: `merge-${step.from}-to-${step.to}`,
-              x: currentX,
-              message: `Merge ${step.from}`,
-              isMerge: true
+          const fromType = getBranchType(step.from)
+          const toType = getBranchType(step.to)
+          const toColor = BRANCH_COLORS[toType] || '#6c6f85'
+          const fromColor = BRANCH_COLORS[fromType] || '#6c6f85'
+          const y = branchYPositions[step.to] ?? 0
+          
+          const mergeId = `merge-${stepIndex}`
+          const fromCommits = branchCommits[step.from] || []
+          const toCommits = branchCommits[step.to] || []
+          const fromCommit = fromCommits[fromCommits.length - 1]
+          const toCommit = toCommits[toCommits.length - 1]
+          
+          newNodes.push({
+            id: mergeId,
+            type: 'commit',
+            position: { x: currentX, y },
+            data: { branchType: toType, isMerge: true, isActive: isCurrentStep }
+          })
+          
+          if (!branchCommits[step.to]) branchCommits[step.to] = []
+          branchCommits[step.to].push({ id: mergeId, x: currentX })
+          branchEndX[step.to] = currentX
+          
+          // Curved edge from source branch
+          if (fromCommit) {
+            newEdges.push({
+              id: `edge-merge-from-${stepIndex}`,
+              source: fromCommit.id,
+              target: mergeId,
+              type: 'branch',
+              style: { stroke: fromColor, strokeWidth: 2 },
+              animated: isCurrentStep
             })
-            newMerges.push({
-              from: { x: fromCommit.x, y: fromBranch.y },
-              to: { x: currentX, y: toBranch.y },
-              id: `merge-${stepIndex}`
-            })
-            currentX += 60
           }
+          
+          // Straight edge from previous commit on target branch
+          if (toCommit) {
+            newEdges.push({
+              id: `edge-merge-to-${stepIndex}`,
+              source: toCommit.id,
+              target: mergeId,
+              type: 'branch',
+              style: { stroke: toColor, strokeWidth: 3 },
+              animated: isCurrentStep
+            })
+          }
+          
+          currentX += nodeSpacing
           break
         }
-        case 'delete-branch': {
-          const branch = newBranches.find(b => b.name === step.branch)
-          if (branch) {
-            branch.deleted = true
-          }
-          break
-        }
+        
         case 'tag': {
-          const branch = newBranches.find(b => b.name === step.branch)
-          if (branch) {
-            const lastCommit = branch.commits[branch.commits.length - 1]
-            newTags.push({
-              id: step.tag,
-              x: lastCommit.x,
-              y: branch.y,
-              name: step.tag
+          const branchCommitsArr = branchCommits[step.branch] || []
+          const lastCommit = branchCommitsArr[branchCommitsArr.length - 1]
+          
+          if (lastCommit) {
+            newNodes.push({
+              id: `tag-${step.tag}`,
+              type: 'tag',
+              position: { x: lastCommit.x - 15, y: branchYPositions[step.branch] - 35 },
+              data: { label: step.tag }
             })
           }
+          break
+        }
+        
+        case 'delete-branch': {
+          // Visual indication - gray out the branch label, nodes, and edges
+          const labelNode = newNodes.find(n => n.id === `label-${step.branch}`)
+          if (labelNode) {
+            labelNode.data = { ...labelNode.data, deleted: true }
+            labelNode.style = { opacity: 0.4 }
+          }
+          
+          // Gray out all commit nodes on this branch
+          const branchNodeIds = (branchCommits[step.branch] || []).map(c => c.id)
+          newNodes.forEach(node => {
+            if (branchNodeIds.includes(node.id)) {
+              node.data = { ...node.data, deleted: true }
+              node.style = { ...node.style, opacity: 0.4 }
+            }
+          })
+          
+          // Gray out all edges connected to this branch's nodes
+          newEdges.forEach(edge => {
+            if (branchNodeIds.includes(edge.source) || branchNodeIds.includes(edge.target)) {
+              edge.style = { ...edge.style, opacity: 0.4 }
+            }
+          })
           break
         }
       }
     })
     
-    setBranches(newBranches)
-    setMerges(newMerges)
-    setTags(newTags)
-    
-    // Set animating commit
-    const lastStep = useCase.steps[currentStep]
-    if (lastStep?.action === 'commit') {
-      const branch = newBranches.find(b => b.name === lastStep.branch)
-      if (branch) {
-        const lastCommit = branch.commits[branch.commits.length - 1]
-        setAnimatingCommit(lastCommit?.id)
-        setTimeout(() => setAnimatingCommit(null), 600)
-      }
-    }
-  }, [currentStep, useCase.steps])
+    setNodes(newNodes)
+    setEdges(newEdges)
+  }, [currentStep, useCase.steps, setNodes, setEdges])
   
   // Auto-play
   useEffect(() => {
@@ -173,178 +298,29 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     return () => clearTimeout(timer)
   }, [isPlaying, currentStep, onStepComplete])
   
-  // Calculate dynamic SVG size based on content
-  const svgWidth = Math.max(600, branches.reduce((max, b) => {
-    const lastCommit = b.commits[b.commits.length - 1]
-    return Math.max(max, (lastCommit?.x || 0) + 80)
-  }, 0))
-  
-  const svgHeight = Math.max(200, branches.filter(b => !b.deleted).length * 55 + 60)
-
   return (
-    <div className="gitflow-visualizer" ref={containerRef}>
-      <div className="visualizer-header">
-        <h3>Branch Visualization</h3>
-        <div className="branch-legend-mini">
-          {Array.from(new Set(branches.filter(b => !b.deleted).map(b => getBranchType(b.name)))).map(type => (
-            <span key={type} className="legend-chip" style={{ '--chip-color': BRANCH_COLORS[type] }}>
-              {type}
-            </span>
-          ))}
-        </div>
+    <div className="gitflow-visualizer">
+      <div className="flow-container">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          defaultViewport={{ x: 50, y: 50, zoom: 1.5 }}
+          minZoom={0.4}
+          maxZoom={2}
+          proOptions={{ hideAttribution: true }}
+          nodesDraggable={true}
+          nodesConnectable={false}
+          elementsSelectable={true}
+          defaultEdgeOptions={{ type: 'branch' }}
+        >
+          <Background color="#ccd0da" gap={20} size={1} />
+          <Controls showInteractive={false} position="bottom-right" />
+        </ReactFlow>
       </div>
-      
-      <div className="svg-container">
-        <svg width={svgWidth} height={svgHeight} className="gitflow-svg">
-          <defs>
-            {/* Glow filters */}
-            {Object.entries(BRANCH_COLORS).map(([type, color]) => (
-              <filter key={type} id={`glow-${type}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            ))}
-            
-            {/* Arrow marker */}
-            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#8b949e"/>
-            </marker>
-          </defs>
-          
-          {/* Branch lines */}
-          {branches.filter(b => !b.deleted).map(branch => {
-            const color = getBranchColor(branch.name)
-            const startX = branch.commits[0]?.x || 0
-            const endX = branch.commits[branch.commits.length - 1]?.x || 0
-            
-            return (
-              <g key={branch.name} className="branch-group">
-                {/* Branch line */}
-                <line
-                  x1={startX}
-                  y1={branch.y}
-                  x2={endX}
-                  y2={branch.y}
-                  stroke={color}
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  className="branch-line"
-                />
-                
-                {/* Branch label */}
-                <g transform={`translate(${startX - 10}, ${branch.y})`}>
-                  <rect
-                    x={-Math.min(branch.name.length * 7 + 10, 120)}
-                    y="-12"
-                    width={Math.min(branch.name.length * 7 + 10, 120)}
-                    height="24"
-                    rx="4"
-                    fill={color}
-                    fillOpacity="0.2"
-                    stroke={color}
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={-Math.min(branch.name.length * 7 + 10, 120) / 2}
-                    y="5"
-                    fill={color}
-                    fontSize="11"
-                    fontFamily="monospace"
-                    fontWeight="600"
-                    textAnchor="middle"
-                  >
-                    {branch.name.length > 15 ? branch.name.slice(0, 15) + '...' : branch.name}
-                  </text>
-                </g>
-                
-                {/* Commits */}
-                {branch.commits.map((commit, i) => (
-                  <g 
-                    key={commit.id}
-                    transform={`translate(${commit.x}, ${branch.y})`}
-                    className={`commit-node ${animatingCommit === commit.id ? 'animating' : ''} ${commit.isMerge ? 'merge-commit' : ''}`}
-                  >
-                    <circle
-                      r={commit.isMerge ? 10 : 8}
-                      fill={commit.isMerge ? '#161b22' : color}
-                      stroke={color}
-                      strokeWidth={commit.isMerge ? 3 : 2}
-                      className="commit-circle"
-                    />
-                    {/* Commit message tooltip */}
-                    <title>{commit.message}</title>
-                    
-                    {/* Show commit message for last commit */}
-                    {i === branch.commits.length - 1 && (
-                      <text
-                        y="25"
-                        fill="#8b949e"
-                        fontSize="10"
-                        textAnchor="middle"
-                        className="commit-message"
-                      >
-                        {commit.message.length > 20 ? commit.message.slice(0, 20) + '...' : commit.message}
-                      </text>
-                    )}
-                  </g>
-                ))}
-              </g>
-            )
-          })}
-          
-          {/* Merge arrows */}
-          {merges.map(merge => (
-            <path
-              key={merge.id}
-              d={`M ${merge.from.x} ${merge.from.y} C ${merge.from.x + 30} ${merge.from.y}, ${merge.to.x - 30} ${merge.to.y}, ${merge.to.x} ${merge.to.y}`}
-              fill="none"
-              stroke="#8b949e"
-              strokeWidth="2"
-              strokeDasharray="5,5"
-              className="merge-arrow"
-              opacity="0.6"
-            />
-          ))}
-          
-          {/* Tags */}
-          {tags.map(tag => (
-            <g key={tag.id} transform={`translate(${tag.x}, ${tag.y - 25})`} className="tag-node">
-              <rect
-                x="-25"
-                y="-10"
-                width="50"
-                height="20"
-                rx="4"
-                fill="#ffd700"
-                fillOpacity="0.2"
-                stroke="#ffd700"
-              />
-              <text
-                y="4"
-                fill="#ffd700"
-                fontSize="10"
-                fontWeight="600"
-                textAnchor="middle"
-              >
-                🏷️ {tag.name}
-              </text>
-            </g>
-          ))}
-        </svg>
-      </div>
-      
-      {/* Deleted branches indicator */}
-      {branches.filter(b => b.deleted).length > 0 && (
-        <div className="deleted-branches">
-          <span className="deleted-label">🗑️ Deleted:</span>
-          {branches.filter(b => b.deleted).map(b => (
-            <span key={b.name} className="deleted-branch">{b.name}</span>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
