@@ -26,108 +26,157 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
         </div>
       </div>
       
-      {/* Full-width Visualization Area */}
-      <div className="flex-1 flex flex-col overflow-hidden p-6 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
-        {/* Current Step Message */}
-        <div className="flex items-center gap-4 p-4 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl mb-4 shadow-sm backdrop-blur-md">
-          <code className="font-mono text-sm text-ctp-green bg-green-400/10 px-3 py-1.5 rounded-lg whitespace-nowrap border border-green-400/20">
-            {getGitCommand(useCase.steps[currentStep])}
-          </code>
-          <span className="flex-1 text-base font-medium text-[var(--text-primary)]">
-            {useCase.steps[currentStep]?.message}
-          </span>
+      {/* Main Content Area - Left Sidebar + Visualization */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar - Beginner-Friendly Explanation */}
+        <div className="w-96 shrink-0 p-4 bg-white/80 dark:bg-ctp-mantle/80">
+          <div className="h-full flex flex-col gap-5 p-5 bg-white dark:bg-ctp-base rounded-2xl border border-[var(--border-color)] shadow-lg overflow-y-auto">
+            
+            {/* 1. What's Happening */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">💡</span>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-blue m-0">What's Happening</h3>
+              </div>
+              <p className="text-base leading-relaxed text-[var(--text-primary)] m-0 pl-8">
+                {useCase.steps[currentStep]?.message}
+              </p>
+            </div>
+            
+            {/* Divider */}
+            <hr className="border-0 h-px bg-[var(--border-color)] m-0" />
+            
+            {/* 2. The Command */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">💻</span>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-green m-0">The Command</h3>
+              </div>
+              <div className="pl-8">
+                <code className="font-mono text-sm text-ctp-green bg-ctp-green/10 px-4 py-3 rounded-xl border border-ctp-green/20 block leading-relaxed">
+                  {getGitCommand(useCase.steps[currentStep])}
+                </code>
+              </div>
+            </div>
+            
+            {/* Divider */}
+            <hr className="border-0 h-px bg-[var(--border-color)] m-0" />
+            
+            {/* 3. Result */}
+            <div className="flex flex-col gap-3 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">✅</span>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-mauve m-0">Result</h3>
+              </div>
+              <p className="text-sm leading-relaxed text-[var(--text-secondary)] m-0 pl-8">
+                {getStepResult(useCase.steps[currentStep])}
+              </p>
+            </div>
+            
+          </div>
         </div>
         
-        {/* Visualization - Full Width */}
-        <GitFlowVisualizer 
-          useCase={useCase}
-          currentStep={currentStep}
-          isPlaying={isPlaying}
-          onStepComplete={onStepComplete}
-        />
-      </div>
-      
-      {/* Bottom Timeline Bar - Controls + Horizontal Steps + Step Counter */}
-      <div className="px-6 py-4 bg-[var(--bg-secondary)] border-t border-[var(--border-color)]">
-        <div className="flex items-center gap-4">
-          {/* Playback Controls */}
-          <div className="flex items-center gap-1 bg-[var(--bg-card)] p-1.5 rounded-xl border border-[var(--border-color)] shadow-sm">
-            <button 
-              className="w-9 h-9 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-lg text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-              onClick={onReset} 
-              title="Reset"
-            >
-              ⟲
-            </button>
-            <button 
-              className="w-9 h-9 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-lg text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-              onClick={() => onStepChange(Math.max(0, currentStep - 1))}
-              disabled={currentStep === 0}
-              title="Previous"
-            >
-              ←
-            </button>
-            <button 
-              className={`w-10 h-10 border-none cursor-pointer rounded-xl text-lg flex items-center justify-center transition-all ${isPlaying ? 'bg-ctp-peach/20 text-ctp-peach hover:bg-ctp-peach hover:text-ctp-base' : 'bg-ctp-blue/20 text-ctp-blue hover:bg-ctp-blue hover:text-ctp-base'}`}
-              onClick={onPlayPause}
-              title={isPlaying ? 'Pause' : 'Play'}
-            >
-              {isPlaying ? '⏸' : '▶'}
-            </button>
-            <button 
-              className="w-9 h-9 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-lg text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-              onClick={() => onStepChange(Math.min(useCase.steps.length - 1, currentStep + 1))}
-              disabled={currentStep === useCase.steps.length - 1}
-              title="Next"
-            >
-              →
-            </button>
+        {/* Right - Visualization with Top Timeline */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Visualization */}
+          <div className="flex-1 flex flex-col overflow-hidden p-6 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
+            {/* Timeline Bar - Controls + Horizontal Steps + Step Counter */}
+            <div className="flex items-center gap-3 px-4 py-3 mb-4 bg-white/80 dark:bg-ctp-mantle/80 border border-[var(--border-color)] rounded-2xl shadow-lg">
+              {/* Playback Controls */}
+              <div className="flex items-center gap-1 bg-white dark:bg-ctp-base p-1.5 rounded-full border border-[var(--border-color)] shadow-sm">
+                <button 
+                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
+                  onClick={onReset} 
+                  title="Reset"
+                >
+                  ⇤
+                </button>
+                <button 
+                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
+                  onClick={() => onStepChange(Math.max(0, currentStep - 1))}
+                  disabled={currentStep === 0}
+                  title="Previous"
+                >
+                  ❮
+                </button>
+                <button 
+                  className={`w-10 h-10 border-none cursor-pointer rounded-full text-lg flex items-center justify-center transition-all ${isPlaying ? 'bg-ctp-peach/20 text-ctp-peach hover:bg-ctp-peach hover:text-ctp-base' : 'bg-ctp-blue/20 text-ctp-blue hover:bg-ctp-blue hover:text-ctp-base'}`}
+                  onClick={onPlayPause}
+                  title={isPlaying ? 'Pause' : 'Play'}
+                >
+                  {isPlaying ? '⏸' : '▶'}
+                </button>
+                <button 
+                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
+                  onClick={() => onStepChange(Math.min(useCase.steps.length - 1, currentStep + 1))}
+                  disabled={currentStep === useCase.steps.length - 1}
+                  title="Next"
+                >
+                  ❯
+                </button>
+              </div>
+              
+              {/* Horizontal Timeline */}
+              <div className="flex-1 flex items-center gap-1 mx-2">
+                {useCase.steps.map((step, index) => {
+                  const isActive = index === currentStep
+                  const isCompleted = index < currentStep
+                  
+                  return (
+                    <button
+                      key={index}
+                      className="group relative flex-1 h-8 flex items-center justify-center p-0 border-none cursor-pointer bg-transparent"
+                      onClick={() => onStepChange(index)}
+                      title={`Step ${index + 1}: ${getShortLabel(step)}`}
+                    >
+                      {/* Progress bar segment */}
+                      <div className={`
+                        absolute top-1/2 left-0 right-0 -translate-y-1/2 h-1 rounded-full transition-all duration-300
+                        ${isCompleted ? 'bg-ctp-green' : ''}
+                        ${isActive ? 'bg-gradient-to-r from-ctp-blue to-ctp-mauve shadow-[0_0_8px_rgba(137,180,250,0.5)]' : ''}
+                        ${index > currentStep ? 'bg-[var(--border-color)]' : ''}
+                      `} />
+                      
+                      {/* Step indicator */}
+                      <div className={`
+                        relative z-10 flex items-center justify-center transition-all duration-300
+                        ${isActive 
+                          ? 'w-auto px-3 h-6 rounded-full bg-ctp-blue border-none shadow-[0_0_10px_rgba(137,180,250,0.6)]' 
+                          : 'w-3 h-3 rounded-full border-2'
+                        }
+                        ${isCompleted ? 'bg-ctp-green border-ctp-green' : ''}
+                        ${!isActive && !isCompleted ? 'bg-white dark:bg-ctp-base border-[var(--border-color)] group-hover:scale-125' : ''}
+                      `}>
+                        {isActive && (
+                          <span className="text-xs font-bold text-white whitespace-nowrap leading-none">
+                            {index + 1} / {useCase.steps.length}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Tooltip on hover (skip for active step as it shows info) */}
+                      {!isActive && (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 px-3 py-2 bg-white dark:bg-ctp-base border border-[var(--border-color)] rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 text-xs pointer-events-none">
+                          <div className="flex items-center gap-2">
+                            <span>{getActionIcon(step.action)}</span>
+                            <span className="font-medium text-[var(--text-primary)]">{getShortLabel(step)}</span>
+                          </div>
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 w-2 h-2 bg-white dark:bg-ctp-base border-l border-t border-[var(--border-color)] rotate-45 mb-[-5px]" />
+                        </div>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+            
+            <GitFlowVisualizer 
+              useCase={useCase}
+              currentStep={currentStep}
+              isPlaying={isPlaying}
+              onStepComplete={onStepComplete}
+            />
           </div>
-          
-          {/* Horizontal Timeline */}
-          <div className="flex-1 flex items-center gap-1">
-            {useCase.steps.map((step, index) => (
-              <button
-                key={index}
-                className="group relative flex-1 h-2 p-0 border-none cursor-pointer bg-transparent"
-                onClick={() => onStepChange(index)}
-                title={`Step ${index + 1}: ${getShortLabel(step)}`}
-              >
-                {/* Progress bar segment */}
-                <div className={`
-                  h-full rounded-full transition-all duration-300
-                  ${index < currentStep ? 'bg-ctp-green' : ''}
-                  ${index === currentStep ? 'bg-gradient-to-r from-ctp-blue to-ctp-mauve shadow-[0_0_8px_rgba(137,180,250,0.5)]' : ''}
-                  ${index > currentStep ? 'bg-[var(--border-color)]' : ''}
-                  group-hover:scale-y-150 group-hover:brightness-110
-                `} />
-                
-                {/* Step indicator dot */}
-                <div className={`
-                  absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-                  w-3 h-3 rounded-full border-2 transition-all duration-200
-                  ${index < currentStep ? 'bg-ctp-green border-ctp-green scale-100' : ''}
-                  ${index === currentStep ? 'bg-ctp-blue border-ctp-blue scale-125 shadow-[0_0_10px_rgba(137,180,250,0.6)]' : ''}
-                  ${index > currentStep ? 'bg-[var(--bg-card)] border-[var(--border-color)] scale-75 opacity-60' : ''}
-                  group-hover:scale-150
-                `} />
-                
-                {/* Tooltip on hover */}
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span>{getActionIcon(step.action)}</span>
-                    <span className="font-medium text-[var(--text-primary)]">{getShortLabel(step)}</span>
-                  </div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--bg-card)] border-r border-b border-[var(--border-color)] rotate-45 -mt-1" />
-                </div>
-              </button>
-            ))}
-          </div>
-          
-          {/* Step Counter */}
-          <span className="text-sm font-semibold text-[var(--text-secondary)] tabular-nums whitespace-nowrap">
-            {currentStep + 1} / {useCase.steps.length}
-          </span>
         </div>
       </div>
     </div>
@@ -176,6 +225,23 @@ function getGitCommand(step) {
       return `git tag ${step.tag}`
     default:
       return ''
+  }
+}
+
+function getStepResult(step) {
+  switch (step.action) {
+    case 'create-branch':
+      return `You now have a separate workspace called "${step.to}". Any changes you make here won't affect other branches until you merge them.`
+    case 'commit':
+      return `Your changes are now saved as a permanent snapshot. Think of it like saving a checkpoint in a game - you can always come back to this point.`
+    case 'merge':
+      return `The code from "${step.from}" has been combined into "${step.to}". Both sets of changes now exist together in one place.`
+    case 'delete-branch':
+      return `The branch "${step.branch}" has been removed. This is like cleaning up after finishing a task - the work is done and merged, so we don't need this workspace anymore.`
+    case 'tag':
+      return `Version "${step.tag}" is now marked in history. This makes it easy to find and reference this exact point later, like putting a bookmark in a book.`
+    default:
+      return 'This step updates your repository.'
   }
 }
 
