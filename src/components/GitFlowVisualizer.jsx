@@ -7,23 +7,23 @@ import {
   useEdgesState
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import './FlowNodes.css'
-import './GitFlowVisualizer.css'
+// import './FlowNodes.css' - Moved to index.css
+// import './GitFlowVisualizer.css' - Moved to index.css 
 import { nodeTypes, edgeTypes, BRANCH_COLORS } from './FlowNodes'
 
 // ============================================
-// LAYOUT CONFIGURATION - Adjust these values
+// LAYOUT CONFIGURATION
 // ============================================
 const LAYOUT = {
   VERTICAL_SPACING: 50,    // Space between branches (Y axis)
   HORIZONTAL_SPACING: 60,  // Space between commits (X axis)
   FIRST_COMMIT_X: 150,     // X position of first commit column
   INITIAL_CURRENT_X: 140,  // Starting X position tracker
-  DELETED_LABEL_OPACITY: 0.3,  // Opacity for deleted branch labels
-  DELETED_NODE_OPACITY: 0.1,   // Opacity for deleted nodes and edges
-  VIEWPORT_PADDING_X: 50,  // Left padding from edge of view
-  VIEWPORT_PADDING_Y: 70,  // Top padding from edge of view
-  DEFAULT_ZOOM: 1.5,       // Initial zoom level
+  DELETED_LABEL_OPACITY: 0.3,
+  DELETED_NODE_OPACITY: 0.1,
+  VIEWPORT_PADDING_X: 50,
+  VIEWPORT_PADDING_Y: 70, 
+  DEFAULT_ZOOM: 1.5,
 }
 
 function getBranchType(branchName) {
@@ -79,8 +79,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
       data: { label: 'develop', branchType: devType }
     })
     
-    // Initial commits - spaced for nice curves
-    
+    // Initial commits
     newNodes.push({
       id: 'init-main',
       type: 'commit',
@@ -99,7 +98,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     branchCommits.develop.push({ id: 'init-develop', x: firstCommitX + nodeSpacing })
     branchEndX.develop = firstCommitX + nodeSpacing
     
-    // Edge from main to develop (initial branch)
+    // Edge from main to develop
     newEdges.push({
       id: 'edge-init',
       source: 'init-main',
@@ -131,11 +130,10 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
             data: { label: step.to, branchType }
           })
           
-          // Add first commit on new branch - at least firstCommitX for alignment
+          // Add first commit on new branch
           const commitId = `${step.to}-start`
           const parentCommits = branchCommits[step.from] || []
           const parentCommit = parentCommits[parentCommits.length - 1]
-          // Ensure minimum X is firstCommitX, but position for nice curve from parent
           const branchStartX = Math.max(firstCommitX, parentCommit ? parentCommit.x + nodeSpacing : currentX)
           
           newNodes.push({
@@ -147,7 +145,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           branchCommits[step.to].push({ id: commitId, x: branchStartX })
           branchEndX[step.to] = branchStartX
           
-          // Curved edge from parent branch
           if (parentCommit) {
             newEdges.push({
               id: `edge-create-${step.to}`,
@@ -173,7 +170,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           const prevCommits = branchCommits[step.branch] || []
           const prevCommit = prevCommits[prevCommits.length - 1]
           
-          // Use previous commit X + spacing for consistent spacing
           const commitX = prevCommit ? prevCommit.x + nodeSpacing : currentX
           
           newNodes.push({
@@ -187,7 +183,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           branchCommits[step.branch].push({ id: commitId, x: commitX })
           branchEndX[step.branch] = commitX
           
-          // Straight edge to previous commit on same branch
           if (prevCommit) {
             newEdges.push({
               id: `edge-${commitId}`,
@@ -227,7 +222,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           branchCommits[step.to].push({ id: mergeId, x: currentX })
           branchEndX[step.to] = currentX
           
-          // Curved edge from source branch
           if (fromCommit) {
             newEdges.push({
               id: `edge-merge-from-${stepIndex}`,
@@ -239,7 +233,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
             })
           }
           
-          // Straight edge from previous commit on target branch
           if (toCommit) {
             newEdges.push({
               id: `edge-merge-to-${stepIndex}`,
@@ -271,14 +264,12 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
         }
         
         case 'delete-branch': {
-          // Visual indication - gray out the branch label, nodes, and edges
           const labelNode = newNodes.find(n => n.id === `label-${step.branch}`)
           if (labelNode) {
             labelNode.data = { ...labelNode.data, deleted: true }
             labelNode.style = { opacity: LAYOUT.DELETED_LABEL_OPACITY }
           }
           
-          // Gray out all commit nodes on this branch
           const branchNodeIds = (branchCommits[step.branch] || []).map(c => c.id)
           newNodes.forEach(node => {
             if (branchNodeIds.includes(node.id)) {
@@ -287,7 +278,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
             }
           })
           
-          // Gray out all edges connected to this branch's nodes
           newEdges.forEach(edge => {
             if (branchNodeIds.includes(edge.source) || branchNodeIds.includes(edge.target)) {
               edge.style = { ...edge.style, opacity: LAYOUT.DELETED_NODE_OPACITY }
@@ -314,8 +304,8 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
   }, [isPlaying, currentStep, onStepComplete])
   
   return (
-    <div className="gitflow-visualizer">
-      <div className="flow-container">
+    <div className="flex-1 flex flex-col overflow-hidden min-h-[300px]">
+      <div className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg overflow-hidden relative">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -333,7 +323,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           defaultEdgeOptions={{ type: 'branch' }}
         >
           <Background color="#ccd0da" gap={20} size={1} />
-          <Controls showInteractive={false} position="bottom-right" />
+          <Controls showInteractive={false} position="bottom-right" className="!m-4 !shadow-sm !border-border-color" />
         </ReactFlow>
       </div>
     </div>
