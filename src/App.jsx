@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import GitFlowVisualizer from './components/GitFlowVisualizer'
-import Sidebar from './components/Sidebar'
 import UseCasePanel from './components/UseCasePanel'
 
 function App() {
@@ -75,7 +74,7 @@ function App() {
     },
     {
       id: 'bugfix-develop',
-      title: 'Bugfix in Development',
+      title: 'Bugfix',
       icon: '🐛',
       description: 'Fix a bug discovered during development phase',
       steps: [
@@ -88,7 +87,7 @@ function App() {
     },
     {
       id: 'full-cycle',
-      title: 'Complete Sprint Cycle',
+      title: 'Full Sprint',
       icon: '🔄',
       description: 'A complete development cycle from features to release',
       steps: [
@@ -128,6 +127,7 @@ function App() {
 
   return (
     <div className="app">
+      {/* Header */}
       <header className="app-header">
         <div className="logo">
           <span className="logo-icon">🌊</span>
@@ -136,104 +136,94 @@ function App() {
         <p className="tagline">Interactive guide to understanding GitFlow branching model</p>
       </header>
       
+      {/* Use Cases - Horizontal at TOP */}
+      <nav className="use-cases-bar">
+        {useCases.map(useCase => (
+          <button
+            key={useCase.id}
+            className={`use-case-chip ${selectedUseCase?.id === useCase.id ? 'active' : ''}`}
+            onClick={() => handleSelectUseCase(useCase)}
+          >
+            <span className="chip-icon">{useCase.icon}</span>
+            <span className="chip-title">{useCase.title}</span>
+          </button>
+        ))}
+      </nav>
+      
+      {/* Main content */}
       <main className="app-main">
-        <Sidebar 
-          useCases={useCases} 
-          selectedUseCase={selectedUseCase}
-          onSelectUseCase={handleSelectUseCase}
-        />
-        
-        <div className="content">
-          {selectedUseCase ? (
-            <>
-              <UseCasePanel 
-                useCase={selectedUseCase}
-                currentStep={currentStep}
-                isPlaying={isPlaying}
-                onPlayPause={handlePlayPause}
-                onStepChange={handleStepChange}
-                onReset={handleReset}
-              />
-              <GitFlowVisualizer 
-                useCase={selectedUseCase}
-                currentStep={currentStep}
-                isPlaying={isPlaying}
-                onStepComplete={() => {
-                  if (currentStep < selectedUseCase.steps.length - 1) {
-                    setCurrentStep(prev => prev + 1)
-                  } else {
-                    setIsPlaying(false)
-                  }
-                }}
-              />
-            </>
-          ) : (
-            <div className="welcome-panel">
-              <div className="welcome-content">
-                <h2>Welcome to GitFlow Visualizer! 👋</h2>
-                <p>Select a use case from the sidebar to see an interactive visualization of the GitFlow branching model.</p>
-                
-                <div className="gitflow-intro">
-                  <h3>What is GitFlow?</h3>
-                  <p>GitFlow is a branching model that helps teams manage their Git repositories more effectively. It defines a strict branching structure designed around project releases.</p>
-                  
-                  <div className="branch-legend">
-                    <h4>Branch Types</h4>
-                    <div className="legend-grid">
-                      <div className="legend-item">
-                        <div className="legend-color main"></div>
-                        <div className="legend-info">
-                          <strong>main</strong>
-                          <span>Production-ready code, always deployable</span>
-                        </div>
-                      </div>
-                      <div className="legend-item">
-                        <div className="legend-color develop"></div>
-                        <div className="legend-info">
-                          <strong>develop</strong>
-                          <span>Integration branch for features</span>
-                        </div>
-                      </div>
-                      <div className="legend-item">
-                        <div className="legend-color feature"></div>
-                        <div className="legend-info">
-                          <strong>feature/*</strong>
-                          <span>New feature development</span>
-                        </div>
-                      </div>
-                      <div className="legend-item">
-                        <div className="legend-color release"></div>
-                        <div className="legend-info">
-                          <strong>release/*</strong>
-                          <span>Release preparation branch</span>
-                        </div>
-                      </div>
-                      <div className="legend-item">
-                        <div className="legend-color hotfix"></div>
-                        <div className="legend-info">
-                          <strong>hotfix/*</strong>
-                          <span>Critical production fixes</span>
-                        </div>
-                      </div>
-                      <div className="legend-item">
-                        <div className="legend-color bugfix"></div>
-                        <div className="legend-info">
-                          <strong>bugfix/*</strong>
-                          <span>Bug fixes in development</span>
-                        </div>
-                      </div>
+        {selectedUseCase ? (
+          <UseCasePanel 
+            useCase={selectedUseCase}
+            currentStep={currentStep}
+            isPlaying={isPlaying}
+            onPlayPause={handlePlayPause}
+            onStepChange={handleStepChange}
+            onReset={handleReset}
+            onStepComplete={() => {
+              if (currentStep < selectedUseCase.steps.length - 1) {
+                setCurrentStep(prev => prev + 1)
+              } else {
+                setIsPlaying(false)
+              }
+            }}
+          />
+        ) : (
+          <div className="welcome-panel">
+            <div className="welcome-content">
+              <h2>Welcome to GitFlow Visualizer! 👋</h2>
+              <p>Select a use case above to see an interactive visualization of the GitFlow branching model.</p>
+              
+              <div className="branch-legend">
+                <h4>Branch Types</h4>
+                <div className="legend-grid">
+                  <div className="legend-item">
+                    <div className="legend-color main"></div>
+                    <div className="legend-info">
+                      <strong>main</strong>
+                      <span>Production-ready code</span>
+                    </div>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-color develop"></div>
+                    <div className="legend-info">
+                      <strong>develop</strong>
+                      <span>Integration branch</span>
+                    </div>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-color feature"></div>
+                    <div className="legend-info">
+                      <strong>feature/*</strong>
+                      <span>New features</span>
+                    </div>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-color release"></div>
+                    <div className="legend-info">
+                      <strong>release/*</strong>
+                      <span>Release prep</span>
+                    </div>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-color hotfix"></div>
+                    <div className="legend-info">
+                      <strong>hotfix/*</strong>
+                      <span>Production fixes</span>
+                    </div>
+                  </div>
+                  <div className="legend-item">
+                    <div className="legend-color bugfix"></div>
+                    <div className="legend-info">
+                      <strong>bugfix/*</strong>
+                      <span>Dev bug fixes</span>
                     </div>
                   </div>
                 </div>
-                
-                <div className="quick-start">
-                  <h4>🚀 Quick Start</h4>
-                  <p>Click on any use case in the sidebar to see it animated step-by-step!</p>
-                </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   )

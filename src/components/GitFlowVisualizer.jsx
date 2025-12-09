@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import './GitFlowVisualizer.css'
 
+// Catppuccin Latte branch colors
 const BRANCH_COLORS = {
-  main: '#238636',
-  develop: '#1f6feb',
-  'feature': '#a371f7',
-  'release': '#f0883e',
-  'hotfix': '#f85149',
-  'bugfix': '#db61a2'
+  main: '#40a02b',     // green
+  develop: '#1e66f5',  // blue
+  feature: '#8839ef',  // mauve
+  release: '#fe640b',  // peach
+  hotfix: '#d20f39',   // red
+  bugfix: '#ea76cb'    // pink
 }
 
 function getBranchColor(branchName) {
@@ -17,7 +18,7 @@ function getBranchColor(branchName) {
   if (branchName.startsWith('release/')) return BRANCH_COLORS.release
   if (branchName.startsWith('hotfix/')) return BRANCH_COLORS.hotfix
   if (branchName.startsWith('bugfix/')) return BRANCH_COLORS.bugfix
-  return '#8b949e'
+  return '#6c6f85' // subtext0
 }
 
 function getBranchType(branchName) {
@@ -172,12 +173,13 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     return () => clearTimeout(timer)
   }, [isPlaying, currentStep, onStepComplete])
   
-  const svgWidth = Math.max(800, branches.reduce((max, b) => {
+  // Calculate dynamic SVG size based on content
+  const svgWidth = Math.max(600, branches.reduce((max, b) => {
     const lastCommit = b.commits[b.commits.length - 1]
-    return Math.max(max, (lastCommit?.x || 0) + 100)
+    return Math.max(max, (lastCommit?.x || 0) + 80)
   }, 0))
   
-  const svgHeight = Math.max(300, branches.length * 70 + 100)
+  const svgHeight = Math.max(200, branches.filter(b => !b.deleted).length * 55 + 60)
 
   return (
     <div className="gitflow-visualizer" ref={containerRef}>
@@ -343,14 +345,6 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           ))}
         </div>
       )}
-      
-      {/* Current action display */}
-      <div className="action-display">
-        <div className="action-content">
-          <span className="action-step">Step {currentStep + 1}</span>
-          <span className="action-text">{useCase.steps[currentStep]?.message}</span>
-        </div>
-      </div>
     </div>
   )
 }
