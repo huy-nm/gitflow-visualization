@@ -1,3 +1,5 @@
 name = "gitflow-visualization"
 compatibility_date = "2025-12-09"
-assets = "./dist"
+
+[assets]
+directory = "./dist"

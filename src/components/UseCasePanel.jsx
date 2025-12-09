@@ -65,9 +65,13 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
                 className={`step-item ${index === currentStep ? 'active' : ''} ${index < currentStep ? 'completed' : ''}`}
                 onClick={() => onStepChange(index)}
               >
-                <span className="step-number">{index + 1}</span>
-                <span className="step-action">{getActionIcon(step.action)}</span>
-                <span className="step-label">{getShortLabel(step)}</span>
+                <div className="step-number">{index + 1}</div>
+                <div className="step-content">
+                  <div className="step-header">
+                    <span className="step-action">{getActionIcon(step.action)}</span>
+                    <span className="step-label">{getShortLabel(step)}</span>
+                  </div>
+                </div>
               </button>
             ))}
           </div>
