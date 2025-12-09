@@ -44,6 +44,16 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
         </div>
       </div>
       
+      {/* Progress bar */}
+      <div className="progress-bar-container">
+        <div className="progress-bar">
+          <div 
+            className="progress-fill" 
+            style={{ width: `${((currentStep + 1) / useCase.steps.length) * 100}%` }}
+          />
+        </div>
+      </div>
+      
       {/* Main content: Steps on left, Visualization on right */}
       <div className="panel-content">
         {/* Left: Steps */}
