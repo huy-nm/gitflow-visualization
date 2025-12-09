@@ -304,8 +304,8 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
   }, [isPlaying, currentStep, onStepComplete])
   
   return (
-    <div className="flex-1 flex flex-col overflow-hidden min-h-[300px]">
-      <div className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg overflow-hidden relative">
+    <div className="flex-1 flex flex-col overflow-hidden min-h-[300px] bg-white/80 dark:bg-ctp-mantle/80 border border-[var(--border-color)] rounded-2xl shadow-lg">
+      <div className="flex-1 bg-[var(--bg-secondary)] rounded-2xl overflow-hidden relative">
         <ReactFlow
           nodes={nodes}
           edges={edges}

@@ -2,7 +2,7 @@ import GitFlowVisualizer from './GitFlowVisualizer'
 
 function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onBack, onStepComplete }) {
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-card)] backdrop-blur-3xl rounded-[20px] border border-[var(--glass-border)] shadow-xl mb-8 mx-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-card)] backdrop-blur-3xl rounded-[20px] border border-[var(--glass-border)] mb-4 mx-4 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Compact Header - Back + Title */}
       <div className="flex items-center gap-4 px-5 py-3 bg-white/5 border-b border-[var(--border-color)]">
         {/* Back Button */}
@@ -27,9 +27,9 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
       </div>
       
       {/* Main Content Area - Left Sidebar + Visualization */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden mt-4">
         {/* Left Sidebar - Beginner-Friendly Explanation */}
-        <div className="w-96 shrink-0 p-4 bg-white/80 dark:bg-ctp-mantle/80">
+        <div className="w-96 shrink-0 p-4 pt-6 pb-6 bg-white/80 dark:bg-ctp-mantle/80">
           <div className="h-full flex flex-col gap-5 p-5 bg-white dark:bg-ctp-base rounded-2xl border border-[var(--border-color)] shadow-lg overflow-y-auto">
             
             {/* 1. What's Happening */}
