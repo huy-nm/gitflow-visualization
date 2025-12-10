@@ -1,19 +1,15 @@
+
 import { useState, useEffect } from 'react'
-// import './App.css' - Replaced by Tailwind
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './theme/theme.css'
-import UseCasePanel from './components/UseCasePanel'
-import UseCaseCard from './components/UseCaseCard'
-import { useCasesByCategory } from './useCases'
 import { useTranslation, LANGUAGES } from './i18n'
+import Home from './pages/Home'
+import UseCaseView from './pages/UseCaseView'
 
 function App() {
   const { t, language, setLanguage } = useTranslation()
-  const [selectedUseCase, setSelectedUseCase] = useState(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
   const [showLegend, setShowLegend] = useState(false)
   const [showLanguageMenu, setShowLanguageMenu] = useState(false)
-  const [activeCategory, setActiveCategory] = useState('beginner')
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
@@ -23,29 +19,6 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('theme', theme)
   }, [theme])
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light')
-  }
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
-
-  const handleStepChange = (step) => {
-    setCurrentStep(step)
-  }
-
-  const handleSelectUseCase = (useCase) => {
-    setSelectedUseCase(useCase)
-    setCurrentStep(0)
-    setIsPlaying(false)
-  }
-
-  const handleReset = () => {
-    setCurrentStep(0)
-    setIsPlaying(false)
-  }
 
   return (
     <div className="flex flex-col h-screen w-full max-w-full mx-auto overflow-hidden">
@@ -171,72 +144,11 @@ function App() {
       
       {/* Main content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
-        {selectedUseCase ? (
-          <>
-            <UseCasePanel 
-              useCase={selectedUseCase}
-              currentStep={currentStep}
-              isPlaying={isPlaying}
-              onPlayPause={handlePlayPause}
-              onStepChange={handleStepChange}
-              onReset={handleReset}
-              onBack={() => setSelectedUseCase(null)}
-              onStepComplete={() => {
-                if (currentStep < selectedUseCase.steps.length - 1) {
-                  setCurrentStep(prev => prev + 1)
-                } else {
-                  setIsPlaying(false)
-                }
-              }}
-            />
-          </>
-        ) : (
-          <div className="flex-1 flex flex-col items-center p-8 overflow-y-auto gap-8">
-            <div className="max-w-2xl text-center">
-              <h2 className="text-4xl sm:text-5xl font-extrabold m-0 mb-4 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent -tracking-[0.02em]">
-                {t('app.welcome')}
-              </h2>
-              <p className="text-[var(--text-secondary)] text-lg m-0 leading-relaxed">
-                {t('app.welcomeDescription')}
-              </p>
-            </div>
-            
-            {/* Category Tabs */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {Object.entries(useCasesByCategory).map(([key]) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveCategory(key)}
-                  className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-200 border-2 ${
-                    activeCategory === key
-                      ? 'bg-gradient-to-r from-ctp-blue to-ctp-mauve text-white border-transparent shadow-lg scale-105'
-                      : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-ctp-blue hover:text-ctp-blue hover:-translate-y-0.5'
-                  }`}
-                >
-                  <span className="mr-2">{t(`categories.${key}.title`).split(' ')[0]}</span>
-                  <span>{t(`categories.${key}.title`).split(' ').slice(1).join(' ')}</span>
-                </button>
-              ))}
-            </div>
-            
-            {/* Category Description */}
-            <p className="text-[var(--text-muted)] text-sm m-0">
-              {t(`categories.${activeCategory}.description`)}
-            </p>
-            
-            {/* Card Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl px-4">
-              {useCasesByCategory[activeCategory]?.useCases.map(useCase => (
-                <UseCaseCard
-                  key={useCase.id}
-                  useCase={useCase}
-                  isActive={selectedUseCase?.id === useCase.id}
-                  onClick={() => handleSelectUseCase(useCase)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/use-case/:id" element={<UseCaseView />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
     </div>
   )
