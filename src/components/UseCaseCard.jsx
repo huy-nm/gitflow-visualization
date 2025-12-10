@@ -35,12 +35,27 @@ function UseCaseCard({ useCase, isActive, onClick }) {
            style={{ mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'exclude', WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor' }}>
       </div>
       
-      {/* Shine effect */}
-      <div className="absolute inset-0 h-full w-full bg-gradient-to-b from-white/10 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100 pointer-events-none"></div>
-
-      <div className="card-icon transition-transform duration-400 ease-out group-hover:scale-110 group-hover:rotate-6 z-10">
-        {cloneElement(getUseCaseIcon(useCaseId, useCase.category), { size: 42 })}
-      </div>
+      {/* Category Colors */}
+      {(() => {
+        const colors = {
+          beginner: 'text-ctp-green border-ctp-green bg-ctp-green/10',
+          intermediate: 'text-ctp-yellow border-ctp-yellow bg-ctp-yellow/10',
+          senior: 'text-ctp-red border-ctp-red bg-ctp-red/10',
+          realWorld: 'text-ctp-mauve border-ctp-mauve bg-ctp-mauve/10'
+        }
+        const colorClass = colors[useCase.category] || 'text-ctp-blue border-ctp-blue bg-ctp-blue/10'
+        
+        return (
+          <div className="flex justify-between items-start w-full z-10 mb-4">
+            <div className="card-icon transition-transform duration-400 ease-out group-hover:scale-110 group-hover:rotate-6">
+              {cloneElement(getUseCaseIcon(useCase.id, useCase.category), { size: 42 })}
+            </div>
+            <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full border ${colorClass}`}>
+              {useCase.category === 'realWorld' ? 'Real-World' : useCase.category}
+            </span>
+          </div>
+        )
+      })()}
       
       <div className="flex-1 z-10">
         <h3 className="m-0 mb-2 text-lg font-bold text-[var(--text-primary)] tracking-tight">
@@ -51,8 +66,8 @@ function UseCaseCard({ useCase, isActive, onClick }) {
         </p>
       </div>
       
-      <div className="flex items-center justify-between mt-auto z-10 w-full">
-        <span className="text-xs font-semibold text-ctp-blue bg-blue-400/10 px-3 py-1.5 rounded-xl transition-all duration-300 group-hover:bg-ctp-blue group-hover:text-ctp-base">
+      <div className="flex items-center justify-end mt-auto z-10 w-full opacity-60">
+        <span className="text-xs font-medium text-[var(--text-secondary)]">
           {useCase.steps.length} {t('panel.step').toLowerCase()}s
         </span>
       </div>

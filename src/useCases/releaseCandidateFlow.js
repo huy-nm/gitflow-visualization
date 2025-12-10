@@ -3,6 +3,7 @@ export const releaseCandidateFlow = {
   id: 'release-candidate',
   title: 'Release Candidate Flow',
   icon: '🎯',
+  category: 'realWorld',
   description: 'QA testing release candidates, finding bugs, multiple RC iterations before final release',
   steps: [
     // Feature complete - start release process

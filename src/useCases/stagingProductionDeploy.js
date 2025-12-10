@@ -5,7 +5,7 @@ export const stagingProductionDeploy = {
   id: 'staging-production-deploy',
   title: 'Staging & Production Deploy',
   icon: '🚀',
-  category: 'deployment',
+  category: 'realWorld',
   description: 'Learn how code travels safely from development to live users through staging environment testing',
   steps: [
     // =============================================================

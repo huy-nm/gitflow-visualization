@@ -3,6 +3,7 @@ export const trunkBasedDev = {
   id: 'trunk-based',
   title: 'Trunk-Based Development',
   icon: '🌲',
+  category: 'realWorld',
   description: 'Modern approach: short-lived branches, frequent integration, daily deploys with feature flags',
   steps: [
     // Dev 1: Small PR, merged same day

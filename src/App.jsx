@@ -26,14 +26,10 @@ function App() {
       <header className="flex items-center justify-between px-8 py-4 bg-[var(--bg-card)] backdrop-blur-xl border-b border-[var(--glass-border)] shadow-sm z-10 transition-all duration-300">
         <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
           <div className="flex items-center gap-3">
-            <span className="text-3xl drop-shadow-sm animate-[float_3s_ease-in-out_infinite]">🌊</span>
             <h1 className="text-2xl font-extrabold m-0 bg-gradient-to-br from-ctp-blue via-ctp-mauve to-ctp-peach bg-clip-text text-transparent tracking-tight">
               {t('app.title')}
             </h1>
           </div>
-          <p className="hidden md:block text-sm font-medium text-[var(--text-secondary)] m-0">
-            {t('app.subtitle')}
-          </p>
         </div>
         <div className="flex items-center gap-3">
           {/* Language Switcher */}

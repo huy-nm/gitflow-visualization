@@ -3,6 +3,7 @@ export const sprintDevelopment = {
   id: 'sprint-development',
   title: 'Sprint Development Cycle',
   icon: '🏃',
+  category: 'realWorld',
   description: 'A complete 2-week sprint with multiple developers working on features, code reviews, and integration',
   steps: [
     // Sprint kickoff - two developers start their features

@@ -3,6 +3,7 @@ export const longRunningFeature = {
   id: 'long-running-feature',
   title: 'Long-Running Feature Sync',
   icon: '🔄',
+  category: 'realWorld',
   description: 'Large feature taking 3+ weeks - must sync with develop regularly to avoid merge conflicts',
   steps: [
     // Start major refactor

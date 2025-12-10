@@ -3,6 +3,7 @@ export const criticalHotfix = {
   id: 'critical-hotfix',
   title: 'Critical Production Hotfix',
   icon: '🚨',
+  category: 'realWorld',
   description: 'Production bug discovered - urgent fix needed while other feature work continues in parallel',
   steps: [
     // Normal development in progress
