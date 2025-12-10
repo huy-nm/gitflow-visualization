@@ -2,7 +2,6 @@ import { useState } from 'react'
 import GitFlowVisualizer from './GitFlowVisualizer'
 import { useTranslation } from '../i18n'
 import { 
-  ArrowLeft, 
   Lightbulb, 
   Keyboard, 
   NotePencil, 
@@ -15,10 +14,9 @@ import {
   Copy, 
   Check 
 } from '@phosphor-icons/react'
-import { getUseCaseIcon } from './UseCaseIcon'
-import { cloneElement } from 'react'
 
-function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onBack, onStepComplete }) {
+
+function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onStepComplete }) {
   const { t } = useTranslation()
 // ... (rest of UseCasePanel)
 
@@ -30,41 +28,10 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
 // Wait, replace_file_content cannot handle multiple non-contiguous chunks unless I use multi_replace.
 // I will use multi_replace_file_content.
   
-  // Get translated use case title and description
-  const useCaseId = useCase.id.replace(/-/g, '').replace(/([A-Z])/g, (m) => m.toLowerCase())
-  const translatedTitle = t(`useCases.${useCaseId}.title`) !== `useCases.${useCaseId}.title` 
-    ? t(`useCases.${useCaseId}.title`) 
-    : useCase.title
-  const translatedDescription = t(`useCases.${useCaseId}.description`) !== `useCases.${useCaseId}.description`
-    ? t(`useCases.${useCaseId}.description`)
-    : useCase.description
-
   const stepProgress = ((currentStep + 1) / useCase.steps.length) * 100
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-card)] backdrop-blur-3xl rounded-[20px] border border-[var(--glass-border)] mb-4 mx-4 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
-      {/* Header - Back + Title */}
-      <div className="flex items-center gap-4 px-6 py-4 bg-white/5 border-b border-[var(--border-color)]">
-        <button 
-          className="flex items-center justify-center w-8 h-8 text-[var(--text-secondary)] bg-transparent border border-[var(--border-color)] rounded-lg cursor-pointer transition-all hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)] hover:border-ctp-blue/50" 
-          onClick={onBack}
-          title={t('panel.backToUseCases')}
-        >
-          <ArrowLeft size={18} weight="bold" />
-        </button>
-        <div className="flex items-center gap-3 min-w-0">
-          <span className="text-2xl">
-            {cloneElement(getUseCaseIcon(useCaseId, useCase.category), { size: 32 })}
-          </span>
-          <div>
-            <h2 className="text-lg font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent truncate leading-tight">
-              {translatedTitle}
-            </h2>
-            <p className="text-xs text-[var(--text-muted)] m-0 truncate">{translatedDescription}</p>
-          </div>
-        </div>
-      </div>
       
       {/* Main Content: Split Layout */}
       <div className="flex-1 flex overflow-hidden">
@@ -97,11 +64,11 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-0">
               <div className="flex items-center gap-2.5 mb-3">
                 <Lightbulb size={24} weight="fill" className="text-ctp-yellow" />
-                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.whatsHappening')}
                 </h3>
               </div>
-              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-8 border-l-2 border-ctp-blue/20">
+              <p className="text-[var(--text-secondary)] text-base leading-8 pl-8 border-l-2 border-ctp-blue/20">
                 {useCase.steps[currentStep]?.message}
               </p>
             </div>
@@ -110,7 +77,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-100">
               <div className="flex items-center gap-2.5 mb-3">
                 <Keyboard size={24} weight="fill" className="text-[var(--text-secondary)]" />
-                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.theCommand')}
                 </h3>
               </div>
@@ -123,11 +90,11 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
               <div className="flex items-center gap-2.5 mb-3">
                 <NotePencil size={24} weight="fill" className="text-ctp-blue" />
-                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.result')}
                 </h3>
               </div>
-              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-8 border-l-2 border-ctp-mauve/20">
+              <p className="text-[var(--text-secondary)] text-base leading-8 pl-8 border-l-2 border-ctp-mauve/20">
                 {getStepResult(useCase.steps[currentStep])}
               </p>
             </div>
@@ -137,7 +104,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
               <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
                 <div className="flex items-center gap-2.5 mb-3">
                   <CheckCircle size={24} weight="fill" className="text-ctp-green" />
-                  <h3 className="text-sm font-bold text-ctp-green uppercase tracking-wide">
+                  <h3 className="text-base font-bold text-ctp-green uppercase tracking-wide">
                     Verify
                   </h3>
                 </div>

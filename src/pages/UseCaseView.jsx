@@ -48,7 +48,6 @@ const UseCaseView = () => {
       onPlayPause={handlePlayPause}
       onStepChange={handleStepChange}
       onReset={handleReset}
-      onBack={() => navigate('/')}
       onStepComplete={() => {
         if (currentStep < selectedUseCase.steps.length - 1) {
           setCurrentStep(prev => prev + 1)

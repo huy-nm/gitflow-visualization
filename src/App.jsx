@@ -1,18 +1,30 @@
 
 import { useState, useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import './theme/theme.css'
 import { useTranslation, LANGUAGES } from './i18n'
 import Home from './pages/Home'
 import UseCaseView from './pages/UseCaseView'
-import { Info, GitCommit, GitBranch, Package, Fire, Bug, X } from '@phosphor-icons/react'
+import { allUseCases } from './useCases'
+import { Info, GitCommit, GitBranch, Package, Fire, Bug, X, ArrowLeft } from '@phosphor-icons/react'
+import { initGA, trackPageView } from './utils/analytics'
+import { getUseCaseIcon } from './components/UseCaseIcon'
+import { cloneElement } from 'react'
 
 function App() {
   const { t, language, setLanguage } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [showLegend, setShowLegend] = useState(false)
   const [theme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
+
+  // Extract use case ID from URL if on use case view
+  const useCaseId = location.pathname.startsWith('/use-case/') 
+    ? location.pathname.split('/use-case/')[1] 
+    : null
+  const currentUseCase = useCaseId ? allUseCases.find(uc => uc.id === useCaseId) : null
 
   // Apply theme to document
   useEffect(() => {
@@ -20,18 +32,56 @@ function App() {
     localStorage.setItem('theme', theme)
   }, [theme])
 
+  // Initialize Google Analytics
+  useEffect(() => {
+    initGA()
+  }, [])
+
+  // Track page views on route changes
+  useEffect(() => {
+    trackPageView(location.pathname + location.search)
+  }, [location])
+
   return (
     <div className="flex flex-col h-screen w-full max-w-full mx-auto overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-4 bg-[var(--bg-card)] backdrop-blur-xl border-b border-[var(--glass-border)] shadow-sm z-10 transition-all duration-300">
-        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-          <div className="flex items-center gap-3">
+        {/* Left section */}
+        <div className="flex items-center gap-3 flex-1">
+          {currentUseCase ? (
+            // Use case view: Back button only
+            <button 
+              className="flex items-center justify-center w-10 h-10 text-[var(--text-secondary)] bg-transparent border border-[var(--border-color)] rounded-lg cursor-pointer transition-all hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)] hover:border-ctp-blue/50" 
+              onClick={() => navigate('/')}
+              title={t('panel.backToUseCases')}
+            >
+              <ArrowLeft size={20} weight="bold" />
+            </button>
+          ) : (
+            // Homepage: Regular title
             <h1 className="text-2xl font-extrabold m-0 bg-gradient-to-br from-ctp-blue via-ctp-mauve to-ctp-peach bg-clip-text text-transparent tracking-tight">
               {t('app.title')}
             </h1>
-          </div>
+          )}
         </div>
-        <div className="flex items-center gap-3">
+
+        {/* Center section - Use case info */}
+        {currentUseCase && (
+          <div className="flex items-center gap-3 flex-1 justify-center">
+            <span className="text-2xl">
+              {cloneElement(getUseCaseIcon(useCaseId, currentUseCase.category), { size: 32 })}
+            </span>
+            <div className="max-w-md">
+              <h2 className="text-xl font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent leading-tight truncate">
+                {currentUseCase.title}
+              </h2>
+              <p className="text-sm text-[var(--text-muted)] m-0 truncate">{currentUseCase.description}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Right section */}
+        <div className="flex items-center gap-3 flex-1 justify-end">
           {/* Language Switcher */}
           <div className="relative">
             <button 
