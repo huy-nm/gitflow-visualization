@@ -1,3 +1,4 @@
+
 import GitFlowVisualizer from './GitFlowVisualizer'
 import { useTranslation } from '../i18n'
 
@@ -13,24 +14,24 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
     ? t(`useCases.${useCaseId}.description`)
     : useCase.description
 
+  const stepProgress = ((currentStep + 1) / useCase.steps.length) * 100
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-card)] backdrop-blur-3xl rounded-[20px] border border-[var(--glass-border)] mb-4 mx-4 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Compact Header - Back + Title */}
-      <div className="flex items-center gap-4 px-5 py-3 bg-white/5 border-b border-[var(--border-color)]">
-        {/* Back Button */}
+      
+      {/* Header - Back + Title */}
+      <div className="flex items-center gap-4 px-6 py-4 bg-white/5 border-b border-[var(--border-color)]">
         <button 
-          className="flex items-center justify-center w-9 h-9 text-lg text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl cursor-pointer transition-all hover:text-ctp-blue hover:bg-[var(--bg-card-hover)] hover:border-ctp-blue hover:-translate-x-0.5 hover:shadow-sm shrink-0" 
+          className="flex items-center justify-center w-8 h-8 text-[var(--text-secondary)] bg-transparent border border-[var(--border-color)] rounded-lg cursor-pointer transition-all hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)] hover:border-ctp-blue/50" 
           onClick={onBack}
           title={t('panel.backToUseCases')}
         >
           ←
         </button>
-        
-        {/* Title */}
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <span className="text-2xl shrink-0">{useCase.icon}</span>
-          <div className="min-w-0">
-            <h2 className="text-lg font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent truncate">
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-2xl">{useCase.icon}</span>
+          <div>
+            <h2 className="text-lg font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent truncate leading-tight">
               {translatedTitle}
             </h2>
             <p className="text-xs text-[var(--text-muted)] m-0 truncate">{translatedDescription}</p>
@@ -38,150 +39,149 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
         </div>
       </div>
       
-      {/* Main Content Area - Left Sidebar + Visualization */}
-      <div className="flex-1 flex overflow-hidden mt-4">
-        {/* Left Sidebar - Beginner-Friendly Explanation */}
-        <div className="w-96 shrink-0 p-4 pt-6 pb-6 bg-white/80 dark:bg-ctp-mantle/80">
-          <div className="h-full flex flex-col gap-5 p-5 bg-white dark:bg-ctp-base rounded-2xl border border-[var(--border-color)] shadow-lg overflow-y-auto">
+      {/* Main Content: Split Layout */}
+      <div className="flex-1 flex overflow-hidden">
+        
+        {/* LEFT SIDEBAR - Information Stream */}
+        <div className="w-[400px] shrink-0 flex flex-col border-r border-[var(--border-color)] bg-white/50 dark:bg-ctp-mantle/50 backdrop-blur-sm overflow-hidden">
+          
+          {/* Progress Indicator */}
+          <div className="px-6 py-6 border-b border-[var(--border-color)] bg-[var(--bg-card)]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">
+                Step {currentStep + 1} of {useCase.steps.length}
+              </span>
+              <span className="text-xs font-mono text-[var(--text-secondary)] font-medium">
+                {Math.round(stepProgress)}%
+              </span>
+            </div>
+            <div className="h-1.5 w-full bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-ctp-blue to-ctp-mauve transition-all duration-500 ease-out rounded-full" 
+                style={{width: `${stepProgress}%`}} 
+              />
+            </div>
+          </div>
+
+          {/* Content Scroll Area */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-8">
             
-            {/* 1. What's Happening */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">💡</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-blue m-0">{t('panel.whatsHappening')}</h3>
+            {/* Section 1: Explanation */}
+            <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-0">
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="text-lg">💡</span>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                  {t('panel.whatsHappening')}
+                </h3>
               </div>
-              <p className="text-base leading-relaxed text-[var(--text-primary)] m-0 pl-8">
+              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-8 border-l-2 border-ctp-blue/20">
                 {useCase.steps[currentStep]?.message}
               </p>
             </div>
-            
-            {/* Divider */}
-            <hr className="border-0 h-px bg-[var(--border-color)] m-0" />
-            
-            {/* 2. The Command */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">💻</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-green m-0">{t('panel.theCommand')}</h3>
+
+            {/* Section 2: Command */}
+            <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-100">
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="text-lg">⌨️</span>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                  {t('panel.theCommand')}
+                </h3>
               </div>
               <div className="pl-8">
-                <code className="font-mono text-sm text-ctp-green bg-ctp-green/10 px-4 py-3 rounded-xl border border-ctp-green/20 block leading-relaxed">
+                <code className="block font-mono text-sm text-ctp-green bg-[var(--bg-tertiary)] px-4 py-3 rounded-xl border border-[var(--border-color)] shadow-sm">
                   {getGitCommand(useCase.steps[currentStep])}
                 </code>
               </div>
             </div>
-            
-            {/* Divider */}
-            <hr className="border-0 h-px bg-[var(--border-color)] m-0" />
-            
-            {/* 3. Result */}
-            <div className="flex flex-col gap-3 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">✅</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-mauve m-0">{t('panel.result')}</h3>
+
+            {/* Section 3: Result */}
+            <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="text-lg">📝</span>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
+                  {t('panel.result')}
+                </h3>
               </div>
-              <p className="text-sm leading-relaxed text-[var(--text-secondary)] m-0 pl-8">
+              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-8 border-l-2 border-ctp-mauve/20">
                 {getStepResult(useCase.steps[currentStep])}
               </p>
             </div>
-            
+
+            {/* Section 4: Verification (Conditional) */}
+            {getVerificationInfo(useCase.steps[currentStep]) && (
+              <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <span className="text-lg">✅</span>
+                  <h3 className="text-sm font-bold text-ctp-green uppercase tracking-wide">
+                    Verify
+                  </h3>
+                </div>
+                <div className="ml-8 p-4 rounded-xl bg-ctp-green/5 border border-ctp-green/10">
+                  <div className="flex flex-col gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
+                        Run:
+                      </span>
+                      <code className="font-mono text-xs text-[var(--text-primary)] bg-white/50 dark:bg-black/20 px-2 py-1 rounded inline-block">
+                        {getVerificationInfo(useCase.steps[currentStep]).command}
+                      </code>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
+                        Expect:
+                      </span>
+                      <span className="text-sm text-[var(--text-secondary)]">
+                        {getVerificationInfo(useCase.steps[currentStep]).expectation}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
         
-        {/* Right - Visualization with Top Timeline */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Visualization */}
-          <div className="flex-1 flex flex-col overflow-hidden p-6 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)]">
-            {/* Timeline Bar - Controls + Horizontal Steps + Step Counter */}
-            <div className="flex items-center gap-3 px-4 py-3 mb-4 bg-white/80 dark:bg-ctp-mantle/80 border border-[var(--border-color)] rounded-2xl shadow-lg">
-              {/* Playback Controls */}
-              <div className="flex items-center gap-1 bg-white dark:bg-ctp-base p-1.5 rounded-full border border-[var(--border-color)] shadow-sm">
-                <button 
-                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-                  onClick={onReset} 
-                  title="Reset"
-                >
-                  ⇤
-                </button>
-                <button 
-                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-                  onClick={() => onStepChange(Math.max(0, currentStep - 1))}
-                  disabled={currentStep === 0}
-                  title="Previous"
-                >
-                  ❮
-                </button>
-                <button 
-                  className={`w-10 h-10 border-none cursor-pointer rounded-full text-lg flex items-center justify-center transition-all ${isPlaying ? 'bg-ctp-peach/20 text-ctp-peach hover:bg-ctp-peach hover:text-ctp-base' : 'bg-ctp-blue/20 text-ctp-blue hover:bg-ctp-blue hover:text-ctp-base'}`}
-                  onClick={onPlayPause}
-                  title={isPlaying ? 'Pause' : 'Play'}
-                >
-                  {isPlaying ? '⏸' : '▶'}
-                </button>
-                <button 
-                  className="w-10 h-10 border-none bg-transparent text-[var(--text-secondary)] cursor-pointer rounded-full text-lg flex items-center justify-center transition-all hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed" 
-                  onClick={() => onStepChange(Math.min(useCase.steps.length - 1, currentStep + 1))}
-                  disabled={currentStep === useCase.steps.length - 1}
-                  title="Next"
-                >
-                  ❯
-                </button>
-              </div>
-              
-              {/* Horizontal Timeline */}
-              <div className="flex-1 flex items-center gap-1 mx-2">
-                {useCase.steps.map((step, index) => {
-                  const isActive = index === currentStep
-                  const isCompleted = index < currentStep
-                  
-                  return (
-                    <button
-                      key={index}
-                      className="group relative flex-1 h-8 flex items-center justify-center p-0 border-none cursor-pointer bg-transparent"
-                      onClick={() => onStepChange(index)}
-                      title={`Step ${index + 1}: ${getShortLabel(step)}`}
-                    >
-                      {/* Progress bar segment */}
-                      <div className={`
-                        absolute top-1/2 left-0 right-0 -translate-y-1/2 h-1 rounded-full transition-all duration-300
-                        ${isCompleted ? 'bg-ctp-green' : ''}
-                        ${isActive ? 'bg-gradient-to-r from-ctp-blue to-ctp-mauve shadow-[0_0_8px_rgba(137,180,250,0.5)]' : ''}
-                        ${index > currentStep ? 'bg-[var(--border-color)]' : ''}
-                      `} />
-                      
-                      {/* Step indicator */}
-                      <div className={`
-                        relative z-10 flex items-center justify-center transition-all duration-300
-                        ${isActive 
-                          ? 'w-auto px-3 h-6 rounded-full bg-ctp-blue border-none shadow-[0_0_10px_rgba(137,180,250,0.6)]' 
-                          : 'w-3 h-3 rounded-full border-2'
-                        }
-                        ${isCompleted ? 'bg-ctp-green border-ctp-green' : ''}
-                        ${!isActive && !isCompleted ? 'bg-white dark:bg-ctp-base border-[var(--border-color)] group-hover:scale-125' : ''}
-                      `}>
-                        {isActive && (
-                          <span className="text-xs font-bold text-white whitespace-nowrap leading-none">
-                            {index + 1} / {useCase.steps.length}
-                          </span>
-                        )}
-                      </div>
-                      
-                      {/* Tooltip on hover (skip for active step as it shows info) */}
-                      {!isActive && (
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 px-3 py-2 bg-white dark:bg-ctp-base border border-[var(--border-color)] rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 text-xs pointer-events-none">
-                          <div className="flex items-center gap-2">
-                            <span>{getActionIcon(step.action)}</span>
-                            <span className="font-medium text-[var(--text-primary)]">{getShortLabel(step)}</span>
-                          </div>
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 w-2 h-2 bg-white dark:bg-ctp-base border-l border-t border-[var(--border-color)] rotate-45 mb-[-5px]" />
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-            
+        {/* RIGHT AREA - Visualization */}
+        <div className="flex-1 flex flex-col relative bg-[radial-gradient(ellipse_at_top_right,var(--bg-tertiary),transparent_70%)]">
+          
+          {/* Floating Controls - Top Right */}
+          <div className="absolute top-6 right-6 z-10 flex items-center gap-2 bg-[var(--bg-card)]/90 backdrop-blur-md p-1.5 rounded-full border border-[var(--border-color)] shadow-xl transition-all hover:shadow-2xl hover:scale-105">
+            <button 
+              className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-30" 
+              onClick={onReset} 
+              title="Reset Flow"
+            >
+              ⟲
+            </button>
+            <div className="w-px h-4 bg-[var(--border-color)] mx-1" />
+            <button 
+              className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-30" 
+              onClick={() => onStepChange(Math.max(0, currentStep - 1))}
+              disabled={currentStep === 0}
+              title="Previous Step"
+            >
+              ❮
+            </button>
+            <button 
+              className={`w-12 h-12 flex items-center justify-center rounded-full shadow-md text-xl transition-all ${isPlaying ? 'bg-ctp-peach text-white shadow-ctp-peach/30' : 'bg-ctp-blue text-white shadow-ctp-blue/30'} hover:scale-110`}
+              onClick={onPlayPause}
+              title={isPlaying ? 'Pause' : 'Play Auto-Flow'}
+            >
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+            <button 
+              className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-30" 
+              onClick={() => onStepChange(Math.min(useCase.steps.length - 1, currentStep + 1))}
+              disabled={currentStep === useCase.steps.length - 1}
+              title="Next Step"
+            >
+              ❯
+            </button>
+          </div>
+
+          {/* Visualization Canvas */}
+          <div className="flex-1 overflow-hidden relative">
             <GitFlowVisualizer 
               useCase={useCase}
               currentStep={currentStep}
@@ -190,38 +190,15 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             />
           </div>
         </div>
+
       </div>
     </div>
   )
 }
 
-function getActionIcon(action) {
-  const icons = {
-    'create-branch': '🌿',
-    'commit': '📝',
-    'merge': '🔀',
-    'delete-branch': '🗑',
-    'tag': '🏷'
-  }
-  return icons[action] || '•'
-}
 
-function getShortLabel(step) {
-  switch (step.action) {
-    case 'create-branch':
-      return step.to.split('/')[1] || step.to
-    case 'commit':
-      return step.message.slice(0, 20) + (step.message.length > 20 ? '...' : '')
-    case 'merge':
-      return `Merge → ${step.to}`
-    case 'delete-branch':
-      return `Delete ${step.branch}`
-    case 'tag':
-      return `Tag ${step.tag}`
-    default:
-      return step.message?.slice(0, 15) || ''
-  }
-}
+export default UseCasePanel
+
 
 function getGitCommand(step) {
   switch (step.action) {
@@ -257,4 +234,34 @@ function getStepResult(step) {
   }
 }
 
-export default UseCasePanel
+function getVerificationInfo(step) {
+  switch (step.action) {
+    case 'create-branch':
+      return {
+        command: 'git branch',
+        expectation: <>An asterisk (<span className="text-ctp-green font-bold">*</span>) next to your new branch name: <span className="text-ctp-green font-bold">* {step.to.split('/').pop()}</span></>
+      }
+    case 'commit':
+      return {
+        command: 'git log -1 --oneline',
+        expectation: <>The latest commit message matching: "<span className="text-ctp-green font-bold">{step.message.split(':')[0]}</span>"</>
+      }
+    case 'merge':
+      return {
+        command: 'git log -1 --oneline',
+        expectation: <>A merge commit message like: "<span className="text-ctp-green font-bold">Merge branch '{step.from}'</span>"</>
+      }
+    case 'delete-branch':
+      return {
+        command: 'git branch',
+        expectation: <>The branch <span className="text-ctp-red font-bold">{step.branch}</span> should NO LONGER appear in the list.</>
+      }
+    case 'tag':
+      return {
+        command: 'git tag',
+        expectation: <>The tag <span className="text-ctp-green font-bold">{step.tag}</span> should appear in the list.</>
+      }
+    default:
+      return null
+  }
+}

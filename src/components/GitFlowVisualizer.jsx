@@ -358,28 +358,26 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     : LAYOUT.VIEWPORT_PADDING_Y
   
   return (
-    <div className="flex-1 flex flex-col overflow-hidden min-h-[300px] bg-white/80 dark:bg-ctp-mantle/80 border border-[var(--border-color)] rounded-2xl shadow-lg">
-      <div className="flex-1 bg-[var(--bg-secondary)] rounded-2xl overflow-hidden relative">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          defaultViewport={{ x: LAYOUT.VIEWPORT_PADDING_X, y: viewportY, zoom: LAYOUT.DEFAULT_ZOOM }}
-          minZoom={0.4}
-          maxZoom={2}
-          proOptions={{ hideAttribution: true }}
-          nodesDraggable={true}
-          nodesConnectable={false}
-          elementsSelectable={true}
-          defaultEdgeOptions={{ type: 'branch' }}
-        >
-          <Background color="#ccd0da" gap={20} size={1} />
-          <Controls showInteractive={false} position="bottom-right" className="!m-4 !shadow-sm !border-border-color" />
-        </ReactFlow>
-      </div>
+    <div className="flex-1 flex flex-col overflow-hidden h-full relative">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        defaultViewport={{ x: LAYOUT.VIEWPORT_PADDING_X, y: viewportY, zoom: LAYOUT.DEFAULT_ZOOM }}
+        minZoom={0.4}
+        maxZoom={2}
+        proOptions={{ hideAttribution: true }}
+        nodesDraggable={true}
+        nodesConnectable={false}
+        elementsSelectable={true}
+        defaultEdgeOptions={{ type: 'branch' }}
+      >
+        <Background color="#ccd0da" gap={20} size={1} />
+        <Controls showInteractive={false} position="bottom-right" className="!m-4 !shadow-sm !border-border-color" />
+      </ReactFlow>
     </div>
   )
 }
