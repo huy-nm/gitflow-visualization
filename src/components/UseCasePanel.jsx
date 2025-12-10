@@ -1,6 +1,22 @@
 import { useState } from 'react'
 import GitFlowVisualizer from './GitFlowVisualizer'
 import { useTranslation } from '../i18n'
+import { 
+  ArrowLeft, 
+  Lightbulb, 
+  Keyboard, 
+  NotePencil, 
+  CheckCircle, 
+  ArrowCounterClockwise, 
+  CaretLeft, 
+  Play, 
+  Pause, 
+  CaretRight, 
+  Copy, 
+  Check 
+} from '@phosphor-icons/react'
+import { getUseCaseIcon } from './UseCaseIcon'
+import { cloneElement } from 'react'
 
 function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onBack, onStepComplete }) {
   const { t } = useTranslation()
@@ -35,10 +51,12 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
           onClick={onBack}
           title={t('panel.backToUseCases')}
         >
-          ←
+          <ArrowLeft size={18} weight="bold" />
         </button>
         <div className="flex items-center gap-3 min-w-0">
-          <span className="text-2xl">{useCase.icon}</span>
+          <span className="text-2xl">
+            {cloneElement(getUseCaseIcon(useCaseId, useCase.category), { size: 32 })}
+          </span>
           <div>
             <h2 className="text-lg font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent truncate leading-tight">
               {translatedTitle}
@@ -78,7 +96,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             {/* Section 1: Explanation */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-0">
               <div className="flex items-center gap-2.5 mb-3">
-                <span className="text-lg">💡</span>
+                <Lightbulb size={24} weight="fill" className="text-ctp-yellow" />
                 <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.whatsHappening')}
                 </h3>
@@ -91,7 +109,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             {/* Section 2: Command */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-100">
               <div className="flex items-center gap-2.5 mb-3">
-                <span className="text-lg">⌨️</span>
+                <Keyboard size={24} weight="fill" className="text-[var(--text-secondary)]" />
                 <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.theCommand')}
                 </h3>
@@ -104,7 +122,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             {/* Section 3: Result */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
               <div className="flex items-center gap-2.5 mb-3">
-                <span className="text-lg">📝</span>
+                <NotePencil size={24} weight="fill" className="text-ctp-blue" />
                 <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.result')}
                 </h3>
@@ -118,7 +136,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             {getVerificationInfo(useCase.steps[currentStep]) && (
               <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <span className="text-lg">✅</span>
+                  <CheckCircle size={24} weight="fill" className="text-ctp-green" />
                   <h3 className="text-sm font-bold text-ctp-green uppercase tracking-wide">
                     Verify
                   </h3>
@@ -153,7 +171,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
               onClick={onReset} 
               title="Reset Flow"
             >
-              ⟲
+              <ArrowCounterClockwise size={20} weight="bold" />
             </button>
             <div className="w-px h-4 bg-[var(--border-color)] mx-1" />
             <button 
@@ -162,14 +180,14 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
               disabled={currentStep === 0}
               title="Previous Step"
             >
-              ❮
+              <CaretLeft size={24} weight="bold" />
             </button>
             <button 
               className={`w-12 h-12 flex items-center justify-center rounded-full shadow-md text-xl transition-all ${isPlaying ? 'bg-ctp-peach text-white shadow-ctp-peach/30' : 'bg-ctp-blue text-white shadow-ctp-blue/30'} hover:scale-110`}
               onClick={onPlayPause}
               title={isPlaying ? 'Pause' : 'Play Auto-Flow'}
             >
-              {isPlaying ? '⏸' : '▶'}
+              {isPlaying ? <Pause size={24} weight="fill" /> : <Play size={24} weight="fill" />}
             </button>
             <button 
               className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-30" 
@@ -177,7 +195,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
               disabled={currentStep === useCase.steps.length - 1}
               title="Next Step"
             >
-              ❯
+              <CaretRight size={24} weight="bold" />
             </button>
           </div>
 
@@ -307,23 +325,9 @@ const TerminalBlock = ({ command, label }) => {
           title="Copy"
         >
           {copied ? (
-            <span className="block text-ctp-green text-base leading-none font-bold animate-in zoom-in spin-in-90 duration-300">✓</span>
+            <Check size={16} weight="bold" className="text-ctp-green animate-in zoom-in spin-in-90 duration-300" />
           ) : (
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              className="block"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
+            <Copy size={16} weight="bold" />
           )}
         </button>
       </div>

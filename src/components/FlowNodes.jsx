@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position } from '@xyflow/react'
+import { Tag, GitCommit, GitBranch, Package, Fire, Bug, Rocket, Flask } from '@phosphor-icons/react'
 
 // Catppuccin Latte colors
 const BRANCH_COLORS = {
@@ -74,6 +75,16 @@ CommitNode.displayName = 'CommitNode'
 export const BranchLabelNode = memo(({ data }) => {
   const color = BRANCH_COLORS[data.branchType] || '#6c6f85'
   
+  const getIcon = (type) => {
+    if (type?.startsWith('feature')) return <GitBranch size={12} weight="bold" />
+    if (type?.startsWith('release')) return <Package size={12} weight="fill" />
+    if (type?.startsWith('hotfix')) return <Fire size={12} weight="fill" />
+    if (type?.startsWith('bugfix')) return <Bug size={12} weight="fill" />
+    if (type === 'production') return <Rocket size={12} weight="fill" />
+    if (type === 'staging') return <Flask size={12} weight="fill" />
+    return <GitCommit size={12} weight="bold" /> // main, develop
+  }
+  
   return (
     <div 
       style={{ 
@@ -93,12 +104,9 @@ export const BranchLabelNode = memo(({ data }) => {
         opacity: data.deleted ? 0.4 : 1
       }}
     >
-      <span style={{ 
-        width: 6, 
-        height: 6, 
-        borderRadius: '50%', 
-        background: color 
-      }} />
+      <span style={{ color: color, display: 'flex' }}>
+        {getIcon(data.branchType)}
+      </span>
       <span>{data.label}</span>
     </div>
   )
@@ -124,7 +132,7 @@ export const TagNode = memo(({ data }) => {
         whiteSpace: 'nowrap'
       }}
     >
-      <span>🏷️</span>
+      <Tag size={12} weight="fill" />
       <span style={{ fontFamily: 'monospace' }}>{data.label}</span>
     </div>
   )

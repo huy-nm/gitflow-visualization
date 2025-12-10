@@ -266,7 +266,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
         case 'deploy': {
           const branchCommitsArr = branchCommits[step.branch] || []
           const lastCommit = branchCommitsArr[branchCommitsArr.length - 1]
-          const envLabel = step.environment === 'production' ? '🚀 PRODUCTION' : '🧪 STAGING'
+          const envLabel = step.environment === 'production' ? 'PRODUCTION' : 'STAGING'
           
           // Create environment line if it doesn't exist - position at TOP (negative Y)
           if (branchYPositions[step.environment] === undefined) {

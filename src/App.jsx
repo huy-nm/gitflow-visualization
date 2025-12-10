@@ -5,6 +5,7 @@ import './theme/theme.css'
 import { useTranslation, LANGUAGES } from './i18n'
 import Home from './pages/Home'
 import UseCaseView from './pages/UseCaseView'
+import { Info, GitCommit, GitBranch, Package, Fire, Bug, X } from '@phosphor-icons/react'
 
 function App() {
   const { t, language, setLanguage } = useTranslation()
@@ -57,7 +58,7 @@ function App() {
               onClick={() => setShowLegend(!showLegend)} 
               title={t('app.branchTypes')}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              <Info size={20} weight="bold" />
             </button>
             
             {/* Legend Popover */}
@@ -69,14 +70,14 @@ function App() {
                     className="flex items-center justify-center w-8 h-8 rounded-full text-[var(--text-secondary)] hover:bg-ctp-surface0 hover:text-[var(--text-primary)] transition-colors border-none bg-transparent cursor-pointer" 
                     onClick={() => setShowLegend(false)}
                   >
-                    ✕
+                    <X size={18} weight="bold" />
                   </button>
                 </div>
                 <div className="grid grid-cols-1 gap-3">
                   {/* Main */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-green/10 border border-ctp-green/20 hover:border-ctp-green/50 hover:shadow-[0_0_15px_-5px_var(--ctp-green)] transition-all duration-300 group cursor-default">
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-green/10 border border-ctp-green/20 hover:border-ctp-green/50 hover:shadow-[0_0_15px_-5px_var(--ctp-green)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-green text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle></svg>
+                      <GitCommit size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-green font-bold">main</strong>
@@ -87,7 +88,7 @@ function App() {
                   {/* Develop */}
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-blue/10 border border-ctp-blue/20 hover:border-ctp-blue/50 hover:shadow-[0_0_15px_-5px_var(--ctp-blue)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-blue text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle></svg>
+                      <GitCommit size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-blue font-bold">develop</strong>
@@ -98,7 +99,7 @@ function App() {
                   {/* Feature */}
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-lavender/10 border border-ctp-lavender/20 hover:border-ctp-lavender/50 hover:shadow-[0_0_15px_-5px_var(--ctp-lavender)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-lavender text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><path d="M6 15l12-12"></path></svg>
+                      <GitBranch size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-lavender font-bold">feature/*</strong>
@@ -109,7 +110,7 @@ function App() {
                   {/* Release */}
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-mauve/10 border border-ctp-mauve/20 hover:border-ctp-mauve/50 hover:shadow-[0_0_15px_-5px_var(--ctp-mauve)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-mauve text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path></svg>
+                      <Package size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-mauve font-bold">release/*</strong>
@@ -120,7 +121,7 @@ function App() {
                   {/* Hotfix */}
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-red/10 border border-ctp-red/20 hover:border-ctp-red/50 hover:shadow-[0_0_15px_-5px_var(--ctp-red)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-red text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                      <Fire size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-red font-bold">hotfix/*</strong>
@@ -131,7 +132,7 @@ function App() {
                   {/* Bugfix */}
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-peach/10 border border-ctp-peach/20 hover:border-ctp-peach/50 hover:shadow-[0_0_15px_-5px_var(--ctp-peach)] transition-all duration-300 group cursor-default">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-peach text-white shadow-sm group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path></svg>
+                      <Bug size={16} weight="bold" />
                     </div>
                     <div className="flex flex-col">
                       <strong className="font-mono text-sm text-ctp-peach font-bold">bugfix/*</strong>

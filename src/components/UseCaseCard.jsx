@@ -4,6 +4,8 @@
 // but Tailwind can handle most via utilities.
 
 import { useTranslation } from '../i18n'
+import { getUseCaseIcon } from './UseCaseIcon'
+import { cloneElement } from 'react'
 
 function UseCaseCard({ useCase, isActive, onClick }) {
   const { t } = useTranslation()
@@ -36,8 +38,8 @@ function UseCaseCard({ useCase, isActive, onClick }) {
       {/* Shine effect */}
       <div className="absolute inset-0 h-full w-full bg-gradient-to-b from-white/10 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100 pointer-events-none"></div>
 
-      <div className="card-icon text-[42px] leading-none drop-shadow-md transition-transform duration-400 ease-out group-hover:scale-110 group-hover:rotate-6 z-10">
-        {useCase.icon}
+      <div className="card-icon transition-transform duration-400 ease-out group-hover:scale-110 group-hover:rotate-6 z-10">
+        {cloneElement(getUseCaseIcon(useCaseId, useCase.category), { size: 42 })}
       </div>
       
       <div className="flex-1 z-10">
