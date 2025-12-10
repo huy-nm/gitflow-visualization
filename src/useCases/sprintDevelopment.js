@@ -6,35 +6,115 @@ export const sprintDevelopment = {
   description: 'A complete 2-week sprint with multiple developers working on features, code reviews, and integration',
   steps: [
     // Sprint kickoff - two developers start their features
-    { action: 'create-branch', from: 'develop', to: 'feature/user-auth', message: 'Dev A starts user authentication feature' },
-    { action: 'create-branch', from: 'develop', to: 'feature/payment-api', message: 'Dev B starts payment API integration' },
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/user-auth', 
+      message: '🌱 Step 1: Dev A starts user-auth' 
+    },
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/payment-api', 
+      message: '🌱 Step 2: Dev B starts payment-api' 
+    },
     
     // Initial development
-    { action: 'commit', branch: 'feature/user-auth', message: 'Add OAuth2 provider setup' },
-    { action: 'commit', branch: 'feature/payment-api', message: 'Add Stripe SDK integration' },
+    { 
+      action: 'commit', 
+      branch: 'feature/user-auth', 
+      message: '💻 Step 3: Dev A: Auth setup' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/payment-api', 
+      message: '💻 Step 4: Dev B: Stripe integration' 
+    },
     
     // Continue parallel work
-    { action: 'commit', branch: 'feature/user-auth', message: 'Implement login/logout endpoints' },
-    { action: 'commit', branch: 'feature/payment-api', message: 'Create payment intent handler' },
+    { 
+      action: 'commit', 
+      branch: 'feature/user-auth', 
+      message: '💻 Step 5: Dev A: Login endpoints' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/payment-api', 
+      message: '💻 Step 6: Dev B: Payment handler' 
+    },
     
     // Code review feedback
-    { action: 'commit', branch: 'feature/user-auth', message: 'Address PR review: add rate limiting' },
-    { action: 'commit', branch: 'feature/payment-api', message: 'Address PR review: add idempotency keys' },
+    { 
+      action: 'commit', 
+      branch: 'feature/user-auth', 
+      message: '👀 Step 7: Dev A fixes PR comments' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/payment-api', 
+      message: '👀 Step 8: Dev B fixes PR comments' 
+    },
     
     // First feature merged after approval
-    { action: 'merge', from: 'feature/user-auth', to: 'develop', message: 'PR #42 merged: User Authentication' },
-    { action: 'delete-branch', branch: 'feature/user-auth', message: 'Clean up merged feature branch' },
+    { 
+      action: 'merge', 
+      from: 'feature/user-auth', 
+      to: 'develop', 
+      message: '✅ Step 9: Auth Feature Merged!' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/user-auth', 
+      message: '🧹 Step 10: Cleanup Auth branch' 
+    },
     
     // Second feature merged
-    { action: 'merge', from: 'feature/payment-api', to: 'develop', message: 'PR #43 merged: Payment API' },
-    { action: 'delete-branch', branch: 'feature/payment-api', message: 'Clean up merged feature branch' },
+    { 
+      action: 'merge', 
+      from: 'feature/payment-api', 
+      to: 'develop', 
+      message: '✅ Step 11: Payment Feature Merged!' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/payment-api', 
+      message: '🧹 Step 12: Cleanup Payment branch' 
+    },
     
     // Sprint release preparation
-    { action: 'create-branch', from: 'develop', to: 'release/2.1.0', message: 'Create sprint release branch' },
-    { action: 'commit', branch: 'release/2.1.0', message: 'Bump version to 2.1.0' },
-    { action: 'merge', from: 'release/2.1.0', to: 'main', message: 'Release v2.1.0 to production' },
-    { action: 'tag', branch: 'main', tag: 'v2.1.0', message: 'Tag release v2.1.0' },
-    { action: 'merge', from: 'release/2.1.0', to: 'develop', message: 'Sync release changes back to develop' },
-    { action: 'delete-branch', branch: 'release/2.1.0', message: 'Clean up release branch' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'release/2.1.0', 
+      message: '📦 Step 13: Sprint Over - Create Release' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'release/2.1.0', 
+      message: '🔢 Step 14: Bump version to 2.1.0' 
+    },
+    { 
+      action: 'merge', 
+      from: 'release/2.1.0', 
+      to: 'main', 
+      message: '🚀 Step 15: Deploy Sprint 2.1.0 to Prod' 
+    },
+    { 
+      action: 'tag', 
+      branch: 'main', 
+      tag: 'v2.1.0', 
+      message: '🏷️ Step 16: Tag Release v2.1.0' 
+    },
+    { 
+      action: 'merge', 
+      from: 'release/2.1.0', 
+      to: 'develop', 
+      message: '🔄 Step 17: Sync release info to develop' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'release/2.1.0', 
+      message: '🧹 Step 18: Final Cleanup' 
+    }
   ]
 }

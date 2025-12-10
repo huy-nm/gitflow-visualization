@@ -6,28 +6,96 @@ export const trunkBasedDev = {
   description: 'Modern approach: short-lived branches, frequent integration, daily deploys with feature flags',
   steps: [
     // Dev 1: Small PR, merged same day
-    { action: 'create-branch', from: 'main', to: 'feature/add-tooltip', message: 'Dev 1: Small tooltip feature' },
-    { action: 'commit', branch: 'feature/add-tooltip', message: 'Add tooltip to help icon' },
-    { action: 'merge', from: 'feature/add-tooltip', to: 'main', message: 'PR merged (< 1 hour turnaround)' },
-    { action: 'delete-branch', branch: 'feature/add-tooltip', message: 'Immediate cleanup' },
+    { 
+      action: 'create-branch', 
+      from: 'main', 
+      to: 'feature/add-tooltip', 
+      message: '🌱 Step 1: Dev 1 - Branch from MAIN (Trunk)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/add-tooltip', 
+      message: '💻 Step 2: Add tiny tooltip' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/add-tooltip', 
+      to: 'main', 
+      message: '🚀 Step 3: Quick Merge to Main!' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/add-tooltip', 
+      message: '🧹 Step 4: Cleanup' 
+    },
     
     // Dev 2: Another small change
-    { action: 'create-branch', from: 'main', to: 'feature/fix-typo', message: 'Dev 2: Quick typo fix' },
-    { action: 'commit', branch: 'feature/fix-typo', message: 'Fix typo in error message' },
-    { action: 'merge', from: 'feature/fix-typo', to: 'main', message: 'PR merged (reviewed by bot + human)' },
-    { action: 'delete-branch', branch: 'feature/fix-typo', message: 'Immediate cleanup' },
+    { 
+      action: 'create-branch', 
+      from: 'main', 
+      to: 'feature/fix-typo', 
+      message: '🌱 Step 5: Dev 2 - Branch from MAIN' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/fix-typo', 
+      message: '💻 Step 6: Fix typo' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/fix-typo', 
+      to: 'main', 
+      message: '🚀 Step 7: Another Quick Merge!' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/fix-typo', 
+      message: '🧹 Step 8: Cleanup' 
+    },
     
     // Dev 1: Behind a feature flag
-    { action: 'create-branch', from: 'main', to: 'feature/new-pricing', message: 'Dev 1: New pricing (behind flag)' },
-    { action: 'commit', branch: 'feature/new-pricing', message: 'Add pricing page (feature flag: off)' },
-    { action: 'merge', from: 'feature/new-pricing', to: 'main', message: 'Merge to main (flag still off)' },
-    { action: 'delete-branch', branch: 'feature/new-pricing', message: 'Merged but not visible to users' },
+    { 
+      action: 'create-branch', 
+      from: 'main', 
+      to: 'feature/new-pricing', 
+      message: '🌱 Step 9: Feature Flagged Work' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/new-pricing', 
+      message: '🕵️ Step 10: Add code behind flag' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/new-pricing', 
+      to: 'main', 
+      message: '🚀 Step 11: Merge Dark Feature' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/new-pricing', 
+      message: '🧹 Step 12: Cleanup' 
+    },
     
     // Deploy happens multiple times per day
-    { action: 'tag', branch: 'main', tag: 'deploy-1205', message: 'Continuous deployment (12:05 PM)' },
+    { 
+      action: 'tag', 
+      branch: 'main', 
+      tag: 'deploy-1205', 
+      message: '📦 Step 13: Auto-Deploy 12:05 PM' 
+    },
     
     // Later: enable feature flag (no branch needed)
-    { action: 'commit', branch: 'main', message: 'Enable new pricing feature flag for 10% users' },
-    { action: 'tag', branch: 'main', tag: 'deploy-1430', message: 'Continuous deployment (2:30 PM)' }
+    { 
+      action: 'commit', 
+      branch: 'main', 
+      message: '🔓 Step 14: Enable Feature (Config Change)' 
+    },
+    { 
+      action: 'tag', 
+      branch: 'main', 
+      tag: 'deploy-1430', 
+      message: '📦 Step 15: Auto-Deploy 2:30 PM' 
+    }
   ]
 }

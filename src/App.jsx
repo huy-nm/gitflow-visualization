@@ -203,7 +203,7 @@ function App() {
             
             {/* Category Tabs */}
             <div className="flex flex-wrap justify-center gap-3">
-              {Object.entries(useCasesByCategory).map(([key, category]) => (
+              {Object.entries(useCasesByCategory).map(([key]) => (
                 <button
                   key={key}
                   onClick={() => setActiveCategory(key)}
@@ -213,15 +213,15 @@ function App() {
                       : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-ctp-blue hover:text-ctp-blue hover:-translate-y-0.5'
                   }`}
                 >
-                  <span className="mr-2">{category.title.split(' ')[0]}</span>
-                  <span>{category.title.split(' ').slice(1).join(' ')}</span>
+                  <span className="mr-2">{t(`categories.${key}.title`).split(' ')[0]}</span>
+                  <span>{t(`categories.${key}.title`).split(' ').slice(1).join(' ')}</span>
                 </button>
               ))}
             </div>
             
             {/* Category Description */}
             <p className="text-[var(--text-muted)] text-sm m-0">
-              {useCasesByCategory[activeCategory]?.description}
+              {t(`categories.${activeCategory}.description`)}
             </p>
             
             {/* Card Grid */}

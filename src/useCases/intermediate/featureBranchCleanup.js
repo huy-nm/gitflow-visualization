@@ -6,15 +6,57 @@ export const featureBranchCleanup = {
   category: 'intermediate',
   description: 'Squash messy commits into clean history before merge',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/modal', message: 'Start modal component' },
-    { action: 'commit', branch: 'feature/modal', message: 'wip modal' },
-    { action: 'commit', branch: 'feature/modal', message: 'fix typo' },
-    { action: 'commit', branch: 'feature/modal', message: 'more fixes' },
-    { action: 'commit', branch: 'feature/modal', message: 'actually working now' },
-    { action: 'commit', branch: 'feature/modal', message: 'final tweaks' },
-    { action: 'commit', branch: 'feature/modal', message: 'Squash: git rebase -i HEAD~5' },
-    { action: 'commit', branch: 'feature/modal', message: 'Clean: Add reusable modal component' },
-    { action: 'merge', from: 'feature/modal', to: 'develop', message: 'Merge with clean history' },
-    { action: 'delete-branch', branch: 'feature/modal', message: 'Clean up' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/modal', 
+      message: '🌱 Step 1: Start modal feature' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🚧 Step 2: WIP commit' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🚧 Step 3: fix typo' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🚧 Step 4: more debugging' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🚧 Step 5: almost there' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🚧 Step 6: final tweak' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '🪄 Step 7: SQUASH! (git rebase -i) - Combine all previous 5 commits into 1' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/modal', 
+      message: '✨ Step 8: Clean history - "Add reusable modal component"' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/modal', 
+      to: 'develop', 
+      message: '🔀 Step 9: Merge nicely - Develop sees only 1 clean commit' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/modal', 
+      message: '🧹 Step 10: Cleanup' 
+    }
   ]
 }

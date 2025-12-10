@@ -1,6 +1,18 @@
 import GitFlowVisualizer from './GitFlowVisualizer'
+import { useTranslation } from '../i18n'
 
 function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onBack, onStepComplete }) {
+  const { t } = useTranslation()
+  
+  // Get translated use case title and description
+  const useCaseId = useCase.id.replace(/-/g, '').replace(/([A-Z])/g, (m) => m.toLowerCase())
+  const translatedTitle = t(`useCases.${useCaseId}.title`) !== `useCases.${useCaseId}.title` 
+    ? t(`useCases.${useCaseId}.title`) 
+    : useCase.title
+  const translatedDescription = t(`useCases.${useCaseId}.description`) !== `useCases.${useCaseId}.description`
+    ? t(`useCases.${useCaseId}.description`)
+    : useCase.description
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-card)] backdrop-blur-3xl rounded-[20px] border border-[var(--glass-border)] mb-4 mx-4 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Compact Header - Back + Title */}
@@ -9,7 +21,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
         <button 
           className="flex items-center justify-center w-9 h-9 text-lg text-[var(--text-secondary)] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl cursor-pointer transition-all hover:text-ctp-blue hover:bg-[var(--bg-card-hover)] hover:border-ctp-blue hover:-translate-x-0.5 hover:shadow-sm shrink-0" 
           onClick={onBack}
-          title="Back to use cases"
+          title={t('panel.backToUseCases')}
         >
           ←
         </button>
@@ -19,9 +31,9 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
           <span className="text-2xl shrink-0">{useCase.icon}</span>
           <div className="min-w-0">
             <h2 className="text-lg font-bold m-0 bg-gradient-to-br from-ctp-blue to-ctp-mauve bg-clip-text text-transparent truncate">
-              {useCase.title}
+              {translatedTitle}
             </h2>
-            <p className="text-xs text-[var(--text-muted)] m-0 truncate">{useCase.description}</p>
+            <p className="text-xs text-[var(--text-muted)] m-0 truncate">{translatedDescription}</p>
           </div>
         </div>
       </div>
@@ -36,7 +48,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-xl">💡</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-blue m-0">What's Happening</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-blue m-0">{t('panel.whatsHappening')}</h3>
               </div>
               <p className="text-base leading-relaxed text-[var(--text-primary)] m-0 pl-8">
                 {useCase.steps[currentStep]?.message}
@@ -50,7 +62,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-xl">💻</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-green m-0">The Command</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-green m-0">{t('panel.theCommand')}</h3>
               </div>
               <div className="pl-8">
                 <code className="font-mono text-sm text-ctp-green bg-ctp-green/10 px-4 py-3 rounded-xl border border-ctp-green/20 block leading-relaxed">
@@ -66,7 +78,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             <div className="flex flex-col gap-3 flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-xl">✅</span>
-                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-mauve m-0">Result</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-ctp-mauve m-0">{t('panel.result')}</h3>
               </div>
               <p className="text-sm leading-relaxed text-[var(--text-secondary)] m-0 pl-8">
                 {getStepResult(useCase.steps[currentStep])}

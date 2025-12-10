@@ -8,7 +8,9 @@ const BRANCH_COLORS = {
   feature: '#8839ef',
   release: '#fe640b',
   hotfix: '#d20f39',
-  bugfix: '#ea76cb'
+  bugfix: '#ea76cb',
+  staging: '#df8e1d',    // Bright yellow/orange for staging
+  production: '#e64553'  // Bright red/pink for production
 }
 
 // Custom Commit Node
@@ -130,6 +132,40 @@ export const TagNode = memo(({ data }) => {
 
 TagNode.displayName = 'TagNode'
 
+// Environment Node (Staging/Production)
+export const EnvironmentNode = memo(({ data }) => {
+  const bgColor = data.environment === 'production' 
+    ? 'rgba(64, 160, 43, 0.15)' 
+    : 'rgba(223, 142, 29, 0.15)'
+  const borderColor = data.environment === 'production' ? '#40a02b' : '#df8e1d'
+  const textColor = data.environment === 'production' ? '#40a02b' : '#df8e1d'
+  
+  return (
+    <div 
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '4px 10px',
+        background: bgColor,
+        border: `2px solid ${borderColor}`,
+        borderRadius: '8px',
+        fontSize: '10px',
+        fontWeight: 700,
+        color: textColor,
+        whiteSpace: 'nowrap',
+        boxShadow: data.isActive ? `0 0 12px ${borderColor}` : 'none',
+        transform: data.isActive ? 'scale(1.05)' : 'scale(1)',
+        transition: 'all 0.2s ease'
+      }}
+    >
+      <span>{data.label}</span>
+    </div>
+  )
+})
+
+EnvironmentNode.displayName = 'EnvironmentNode'
+
 // Custom edge - bezier curve for different Y, straight for same Y
 export const BranchEdge = memo(({ 
   id, 
@@ -167,7 +203,8 @@ BranchEdge.displayName = 'BranchEdge'
 export const nodeTypes = {
   commit: CommitNode,
   branchLabel: BranchLabelNode,
-  tag: TagNode
+  tag: TagNode,
+  environment: EnvironmentNode
 }
 
 export const edgeTypes = {

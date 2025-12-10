@@ -33,7 +33,8 @@
     "previous": "前へ",
     "next": "次へ",
     "play": "再生",
-    "pause": "一時停止"
+    "pause": "一時停止",
+    "step": "ステップ"
   },
   "branches": {
     "main": "本番環境コード",
@@ -47,5 +48,99 @@
     "en": "English",
     "vi": "Tiếng Việt",
     "ja": "日本語"
+  },
+  "useCases": {
+    "firstFeatureBranch": {
+      "title": "初めてのFeatureブランチ",
+      "description": "基本を学ぶ：ブランチ作成、変更、マージ"
+    },
+    "saveYourWork": {
+      "title": "作業を保存",
+      "description": "作業中に進捗を保存するために複数のコミットを作成"
+    },
+    "undoLastCommit": {
+      "title": "最後のコミットを取り消す",
+      "description": "間違えた？最後のコミットを元に戻す方法を学ぶ"
+    },
+    "switchBetweenTasks": {
+      "title": "タスク間の切り替え",
+      "description": "ブランチを切り替えて複数のことに取り組む"
+    },
+    "firstPullRequest": {
+      "title": "初めてのプルリクエスト",
+      "description": "完全なワークフロー：ブランチ → コミット → PR → レビュー → マージ"
+    },
+    "syncWithTeam": {
+      "title": "チームと同期",
+      "description": "developから最新の変更を取得し、コンフリクトを解決"
+    },
+    "codeReviewCycle": {
+      "title": "コードレビューサイクル",
+      "description": "承認されるまで追加コミットでPRフィードバックに対応"
+    },
+    "featureBranchCleanup": {
+      "title": "Featureブランチの整理",
+      "description": "マージ前に乱雑なコミットをきれいな履歴にスカッシュ"
+    },
+    "bugFoundInPR": {
+      "title": "PRでバグ発見",
+      "description": "QAやレビュアーがPR中にバグを発見 - 修正して更新"
+    },
+    "parallelWork": {
+      "title": "並行作業",
+      "description": "2つの機能を同時に開発 - マージ順序が重要"
+    },
+    "cherryPickFix": {
+      "title": "Cherry Pick修正",
+      "description": "完全なマージなしで特定のコミットを複数のブランチに適用"
+    },
+    "rebaseVsMerge": {
+      "title": "Rebase vs Merge",
+      "description": "きれいで線形な履歴のためにインタラクティブリベースを使用"
+    },
+    "monorepoRelease": {
+      "title": "Monorepoリリース",
+      "description": "モノレポ内の複数パッケージ間でリリースを調整"
+    },
+    "rollbackStrategy": {
+      "title": "ロールバック戦略",
+      "description": "本番デプロイ失敗 - 元に戻し、分析し、適切に修正"
+    },
+    "branchProtection": {
+      "title": "ブランチ保護",
+      "description": "保護されたブランチと必須レビューでコード品質を確保"
+    },
+    "sprintDevelopment": {
+      "title": "スプリント開発サイクル",
+      "description": "複数の開発者が機能に取り組む完全な2週間スプリント"
+    },
+    "criticalHotfix": {
+      "title": "クリティカルHotfix",
+      "description": "本番バグ発見 - 機能開発を続けながら緊急修正が必要"
+    },
+    "releaseCandidateFlow": {
+      "title": "リリース候補フロー",
+      "description": "リリース候補のQAテスト、バグ発見、複数のRC反復"
+    },
+    "longRunningFeature": {
+      "title": "長期Feature同期",
+      "description": "3週間以上かかる大きな機能 - 定期的にdevelopと同期が必要"
+    },
+    "trunkBasedDev": {
+      "title": "Trunk-Based Development",
+      "description": "モダンなアプローチ：短命ブランチ、頻繁な統合、フィーチャーフラグ"
+    },
+    "stagingproductiondeploy": {
+      "title": "ステージング＆本番デプロイ",
+      "description": "完全なデプロイフロー：ステージング → テスト → 本番"
+    }
+  },
+  "results": {
+    "createBranch": "「{branch}」という別のワークスペースができました。ここでの変更はマージするまで他のブランチに影響しません。",
+    "commit": "変更が永続的なスナップショットとして保存されました。ゲームのチェックポイントのように、いつでもこのポイントに戻れます。",
+    "merge": "「{from}」のコードが「{to}」に統合されました。両方の変更セットが1つの場所に存在します。",
+    "deleteBranch": "ブランチ「{branch}」が削除されました。タスク完了後の片付けのように、作業は完了しマージされました。",
+    "tag": "バージョン「{tag}」が履歴にマークされました。後でこの正確なポイントを簡単に見つけて参照できます。",
+    "default": "このステップでリポジトリが更新されます。"
   }
 }

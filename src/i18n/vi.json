@@ -33,7 +33,8 @@
     "previous": "Trước",
     "next": "Sau",
     "play": "Phát",
-    "pause": "Dừng"
+    "pause": "Dừng",
+    "step": "Bước"
   },
   "branches": {
     "main": "Code sẵn sàng production",
@@ -47,5 +48,99 @@
     "en": "English",
     "vi": "Tiếng Việt",
     "ja": "日本語"
+  },
+  "useCases": {
+    "firstFeatureBranch": {
+      "title": "Nhánh Feature Đầu Tiên",
+      "description": "Học cơ bản: tạo nhánh, thay đổi code, và merge lại"
+    },
+    "saveYourWork": {
+      "title": "Lưu Công Việc",
+      "description": "Tạo nhiều commit để lưu tiến trình khi làm việc"
+    },
+    "undoLastCommit": {
+      "title": "Hoàn Tác Commit",
+      "description": "Làm sai? Học cách hoàn tác và làm lại commit cuối"
+    },
+    "switchBetweenTasks": {
+      "title": "Chuyển Đổi Công Việc",
+      "description": "Học cách làm nhiều việc bằng cách chuyển đổi nhánh"
+    },
+    "firstPullRequest": {
+      "title": "Pull Request Đầu Tiên",
+      "description": "Quy trình hoàn chỉnh: nhánh → commit → PR → review → merge"
+    },
+    "syncWithTeam": {
+      "title": "Đồng Bộ Với Team",
+      "description": "Pull code mới nhất từ develop và giải quyết xung đột"
+    },
+    "codeReviewCycle": {
+      "title": "Chu Trình Code Review",
+      "description": "Xử lý phản hồi PR bằng các commit bổ sung đến khi được duyệt"
+    },
+    "featureBranchCleanup": {
+      "title": "Dọn Dẹp Nhánh Feature",
+      "description": "Gộp các commit lộn xộn thành lịch sử sạch trước khi merge"
+    },
+    "bugFoundInPR": {
+      "title": "Phát Hiện Bug Trong PR",
+      "description": "QA hoặc reviewer tìm thấy bug trong PR - sửa và cập nhật"
+    },
+    "parallelWork": {
+      "title": "Làm Việc Song Song",
+      "description": "Hai feature phát triển đồng thời - thứ tự merge quan trọng"
+    },
+    "cherryPickFix": {
+      "title": "Cherry Pick Fix",
+      "description": "Áp dụng commit cụ thể vào nhiều nhánh mà không cần merge toàn bộ"
+    },
+    "rebaseVsMerge": {
+      "title": "Rebase vs Merge",
+      "description": "Sử dụng interactive rebase để có lịch sử sạch, tuyến tính"
+    },
+    "monorepoRelease": {
+      "title": "Monorepo Release",
+      "description": "Phối hợp release giữa nhiều package trong monorepo"
+    },
+    "rollbackStrategy": {
+      "title": "Chiến Lược Rollback",
+      "description": "Deploy production thất bại - revert, phân tích, và sửa đúng cách"
+    },
+    "branchProtection": {
+      "title": "Bảo Vệ Nhánh",
+      "description": "Đảm bảo chất lượng code với nhánh được bảo vệ và yêu cầu review"
+    },
+    "sprintDevelopment": {
+      "title": "Chu Trình Sprint",
+      "description": "Sprint 2 tuần hoàn chỉnh với nhiều developer làm việc trên features"
+    },
+    "criticalHotfix": {
+      "title": "Hotfix Khẩn Cấp",
+      "description": "Phát hiện bug production - cần sửa gấp trong khi feature tiếp tục"
+    },
+    "releaseCandidateFlow": {
+      "title": "Quy Trình Release Candidate",
+      "description": "QA test release candidate, tìm bug, nhiều vòng RC"
+    },
+    "longRunningFeature": {
+      "title": "Feature Dài Hạn",
+      "description": "Feature lớn mất 3+ tuần - phải đồng bộ develop thường xuyên"
+    },
+    "trunkBasedDev": {
+      "title": "Trunk-Based Development",
+      "description": "Cách hiện đại: nhánh ngắn hạn, tích hợp thường xuyên, feature flags"
+    },
+    "stagingproductiondeploy": {
+      "title": "Deploy Staging & Production",
+      "description": "Quy trình deploy hoàn chỉnh: staging → test → production"
+    }
+  },
+  "results": {
+    "createBranch": "Bạn đã có một workspace riêng gọi là \"{branch}\". Mọi thay đổi ở đây sẽ không ảnh hưởng các nhánh khác cho đến khi bạn merge.",
+    "commit": "Các thay đổi của bạn đã được lưu như một snapshot vĩnh viễn. Giống như lưu checkpoint trong game - bạn luôn có thể quay lại điểm này.",
+    "merge": "Code từ \"{from}\" đã được kết hợp vào \"{to}\". Cả hai bộ thay đổi giờ tồn tại cùng nhau ở một nơi.",
+    "deleteBranch": "Nhánh \"{branch}\" đã bị xóa. Giống như dọn dẹp sau khi hoàn thành công việc - công việc đã xong và được merge.",
+    "tag": "Phiên bản \"{tag}\" đã được đánh dấu trong lịch sử. Điều này giúp dễ dàng tìm và tham chiếu điểm này sau.",
+    "default": "Bước này cập nhật repository của bạn."
   }
 }

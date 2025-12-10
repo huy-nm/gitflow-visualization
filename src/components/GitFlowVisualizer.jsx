@@ -263,6 +263,54 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           break
         }
         
+        case 'deploy': {
+          const branchCommitsArr = branchCommits[step.branch] || []
+          const lastCommit = branchCommitsArr[branchCommitsArr.length - 1]
+          const envLabel = step.environment === 'production' ? '🚀 PRODUCTION' : '🧪 STAGING'
+          
+          // Create environment line if it doesn't exist - position at TOP (negative Y)
+          if (branchYPositions[step.environment] === undefined) {
+            // Staging at -50, Production at -100 (above main which is at 0)
+            const envY = step.environment === 'production' ? -LAYOUT.VERTICAL_SPACING * 2 : -LAYOUT.VERTICAL_SPACING
+            branchYPositions[step.environment] = envY
+            branchCommits[step.environment] = []
+            
+            // Add environment label
+            newNodes.push({
+              id: `label-${step.environment}`,
+              type: 'branchLabel',
+              position: { x: 0, y: envY - 8 },
+              data: { 
+                label: envLabel, 
+                branchType: step.environment // Use environment as branchType for color
+              }
+            })
+          }
+          
+          if (lastCommit) {
+            // Add deploy node on environment line
+            const envId = `deploy-${step.environment}-${stepIndex}`
+            const envY = branchYPositions[step.environment]
+            const envX = lastCommit.x
+            
+            newNodes.push({
+              id: envId,
+              type: 'commit',
+              position: { x: envX, y: envY },
+              data: { 
+                branchType: step.environment, // Use environment as branchType
+                isActive: isCurrentStep,
+                isDeploy: true
+              }
+            })
+            
+            // Track this commit (no connection lines per user request)
+            if (!branchCommits[step.environment]) branchCommits[step.environment] = []
+            branchCommits[step.environment].push({ id: envId, x: envX })
+          }
+          break
+        }
+        
         case 'delete-branch': {
           const labelNode = newNodes.find(n => n.id === `label-${step.branch}`)
           if (labelNode) {
@@ -303,6 +351,12 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
     return () => clearTimeout(timer)
   }, [isPlaying, currentStep, onStepComplete])
   
+  // Calculate viewport offset based on environments
+  const hasEnvironments = useCase.steps.some(step => step.action === 'deploy')
+  const viewportY = hasEnvironments 
+    ? LAYOUT.VIEWPORT_PADDING_Y + LAYOUT.VERTICAL_SPACING * 2  // Shift down to show environments at top
+    : LAYOUT.VIEWPORT_PADDING_Y
+  
   return (
     <div className="flex-1 flex flex-col overflow-hidden min-h-[300px] bg-white/80 dark:bg-ctp-mantle/80 border border-[var(--border-color)] rounded-2xl shadow-lg">
       <div className="flex-1 bg-[var(--bg-secondary)] rounded-2xl overflow-hidden relative">
@@ -313,7 +367,7 @@ function GitFlowVisualizer({ useCase, currentStep, isPlaying, onStepComplete }) 
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          defaultViewport={{ x: LAYOUT.VIEWPORT_PADDING_X, y: LAYOUT.VIEWPORT_PADDING_Y, zoom: LAYOUT.DEFAULT_ZOOM }}
+          defaultViewport={{ x: LAYOUT.VIEWPORT_PADDING_X, y: viewportY, zoom: LAYOUT.DEFAULT_ZOOM }}
           minZoom={0.4}
           maxZoom={2}
           proOptions={{ hideAttribution: true }}

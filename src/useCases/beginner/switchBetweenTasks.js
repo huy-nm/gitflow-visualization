@@ -6,14 +6,54 @@ export const switchBetweenTasks = {
   category: 'beginner',
   description: 'Learn to work on multiple things by switching branches',
   steps: [
-    { action: 'create-branch', from: 'main', to: 'feature/navbar', message: 'Start working on navbar' },
-    { action: 'commit', branch: 'feature/navbar', message: 'Add navbar component' },
-    { action: 'create-branch', from: 'main', to: 'feature/footer', message: 'Urgent: switch to footer task' },
-    { action: 'commit', branch: 'feature/footer', message: 'Add footer component' },
-    { action: 'merge', from: 'feature/footer', to: 'main', message: 'Footer done first (urgent)' },
-    { action: 'delete-branch', branch: 'feature/footer', message: 'Clean up footer branch' },
-    { action: 'commit', branch: 'feature/navbar', message: 'Back to navbar - add links' },
-    { action: 'merge', from: 'feature/navbar', to: 'main', message: 'Navbar complete' },
-    { action: 'delete-branch', branch: 'feature/navbar', message: 'Clean up navbar branch' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/navbar', 
+      message: '🌱 Step 1: Start Task A - Create "navbar" branch from develop' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/navbar', 
+      message: '💻 Step 2: Work on navbar... (git commit)' 
+    },
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/footer', 
+      message: '🚨 Step 3: URGENT REQUEST! Switch context to new "footer" branch' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/footer', 
+      message: '🔥 Step 4: Implement urgent footer fix' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/footer', 
+      to: 'develop', 
+      message: '✅ Step 5: Footer done! Merge it immediately' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/footer', 
+      message: '🧹 Step 6: Cleanup footer branch' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/navbar', 
+      message: '🔙 Step 7: Switch back to "navbar" branch and continue working' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/navbar', 
+      to: 'develop', 
+      message: '✅ Step 8: Navbar complete! Merge to develop' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/navbar', 
+      message: '🧹 Step 9: All tasks complete!' 
+    }
   ]
 }

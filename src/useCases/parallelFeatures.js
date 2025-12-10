@@ -4,15 +4,59 @@ export const parallelFeatures = {
   icon: '🔀',
   description: 'Multiple developers working on different features simultaneously',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/dashboard', message: 'Dev A creates dashboard feature' },
-    { action: 'create-branch', from: 'develop', to: 'feature/profile', message: 'Dev B creates profile feature' },
-    { action: 'commit', branch: 'feature/dashboard', message: 'Add dashboard layout' },
-    { action: 'commit', branch: 'feature/profile', message: 'Add profile page' },
-    { action: 'commit', branch: 'feature/dashboard', message: 'Add charts and widgets' },
-    { action: 'commit', branch: 'feature/profile', message: 'Add avatar upload' },
-    { action: 'merge', from: 'feature/profile', to: 'develop', message: 'Merge profile feature first' },
-    { action: 'merge', from: 'feature/dashboard', to: 'develop', message: 'Merge dashboard feature' },
-    { action: 'delete-branch', branch: 'feature/profile', message: 'Clean up profile branch' },
-    { action: 'delete-branch', branch: 'feature/dashboard', message: 'Clean up dashboard branch' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/dashboard', 
+      message: '🌱 Step 1: Dev A starts Dashboard' 
+    },
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/profile', 
+      message: '🌱 Step 2: Dev B starts Profile' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/dashboard', 
+      message: '💻 Step 3: Dev A: Dashboard layout' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/profile', 
+      message: '💻 Step 4: Dev B: Profile page' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/dashboard', 
+      message: '💻 Step 5: Dev A: Add charts' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/profile', 
+      message: '💻 Step 6: Dev B: Avatar upload' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/profile', 
+      to: 'develop', 
+      message: '✅ Step 7: Profile Feature Merged!' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/dashboard', 
+      to: 'develop', 
+      message: '✅ Step 8: Dashboard Feature Merged!' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/profile', 
+      message: '🧹 Step 9: Cleanup Profile branch' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/dashboard', 
+      message: '🧹 Step 10: Cleanup Dashboard branch' 
+    }
   ]
 }

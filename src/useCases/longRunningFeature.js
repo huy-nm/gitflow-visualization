@@ -6,29 +6,89 @@ export const longRunningFeature = {
   description: 'Large feature taking 3+ weeks - must sync with develop regularly to avoid merge conflicts',
   steps: [
     // Start major refactor
-    { action: 'create-branch', from: 'develop', to: 'feature/redesign-checkout', message: 'Start major checkout redesign (3 week estimate)' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 1: Create new checkout components' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 1: Add cart summary widget' },
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/redesign-checkout', 
+      message: '🌱 Step 1: Start 3-week Feature (Checkout Redesign)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '💻 Step 2: Week 1 work...' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '💻 Step 3: More Week 1 work...' 
+    },
     
     // Meanwhile, other work lands on develop
-    { action: 'commit', branch: 'develop', message: 'Other team: fix header alignment' },
-    { action: 'commit', branch: 'develop', message: 'Other team: add A/B test framework' },
+    { 
+      action: 'commit', 
+      branch: 'develop', 
+      message: '👥 Step 4: Other team updates develop' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'develop', 
+      message: '👥 Step 5: More updates on develop' 
+    },
     
     // Week 2: Sync with develop to get latest changes
-    { action: 'merge', from: 'develop', to: 'feature/redesign-checkout', message: 'Sync: pull latest develop into feature' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 2: Resolve minor merge conflicts' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 2: Add payment method selection' },
+    { 
+      action: 'merge', 
+      from: 'develop', 
+      to: 'feature/redesign-checkout', 
+      message: '🔄 Step 6: SYNC! Pull develop into feature (Avoid conflicts!)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '🛠️ Step 7: Resolve any sync conflicts' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '💻 Step 8: Week 2 work continues...' 
+    },
     
     // More work lands on develop
-    { action: 'commit', branch: 'develop', message: 'Other team: update API client library' },
+    { 
+      action: 'commit', 
+      branch: 'develop', 
+      message: '👥 Step 9: Develop moves forward again' 
+    },
     
     // Week 3: Final sync and complete
-    { action: 'merge', from: 'develop', to: 'feature/redesign-checkout', message: 'Final sync before completion' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 3: Complete order confirmation flow' },
-    { action: 'commit', branch: 'feature/redesign-checkout', message: 'Week 3: Add E2E tests' },
+    { 
+      action: 'merge', 
+      from: 'develop', 
+      to: 'feature/redesign-checkout', 
+      message: '🔄 Step 10: Final Sync before merge' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '💻 Step 11: Week 3 - Final polish' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/redesign-checkout', 
+      message: '🧪 Step 12: E2E Tests' 
+    },
     
     // Feature complete, merge back
-    { action: 'merge', from: 'feature/redesign-checkout', to: 'develop', message: 'Merge: checkout redesign complete!' },
-    { action: 'delete-branch', branch: 'feature/redesign-checkout', message: 'Clean up feature branch' }
+    { 
+      action: 'merge', 
+      from: 'feature/redesign-checkout', 
+      to: 'develop', 
+      message: '✅ Step 13: Merge huge feature back to develop' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/redesign-checkout', 
+      message: '🧹 Step 14: Cleanup' 
+    }
   ]
 }

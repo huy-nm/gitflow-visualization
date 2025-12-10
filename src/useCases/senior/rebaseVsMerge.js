@@ -6,15 +6,57 @@ export const rebaseVsMerge = {
   category: 'senior',
   description: 'Use interactive rebase for clean, linear history',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/optimization', message: 'Start optimization work' },
-    { action: 'commit', branch: 'feature/optimization', message: 'Optimize database queries' },
-    { action: 'commit', branch: 'develop', message: 'Meanwhile: teammate merged feature' },
-    { action: 'commit', branch: 'feature/optimization', message: 'Add caching layer' },
-    { action: 'commit', branch: 'develop', message: 'Meanwhile: another feature merged' },
-    { action: 'commit', branch: 'feature/optimization', message: 'Rebase: git rebase develop' },
-    { action: 'commit', branch: 'feature/optimization', message: 'Resolve conflicts during rebase' },
-    { action: 'commit', branch: 'feature/optimization', message: 'Now ahead of develop cleanly' },
-    { action: 'merge', from: 'feature/optimization', to: 'develop', message: 'Fast-forward merge (clean history!)' },
-    { action: 'delete-branch', branch: 'feature/optimization', message: 'Clean up' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/optimization', 
+      message: '🌱 Step 1: Start optimization' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/optimization', 
+      message: '💨 Step 2: Optimize queries' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'develop', 
+      message: '👥 Step 3: Team adds commits to develop' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/optimization', 
+      message: '💾 Step 4: Add caching layer' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'develop', 
+      message: '👥 Step 5: More team activity on develop' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/optimization', 
+      message: 'rewind: Rebase! (git rebase develop) - Replaying my commits on top of new develop' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/optimization', 
+      message: '🛠️ Step 6: Conflict resolution during rebase' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/optimization', 
+      message: '✨ Step 7: History is now linear!' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/optimization', 
+      to: 'develop', 
+      message: '🔀 Step 8: Fast-forward merge - No ugly merge bubbles' 
+    },
+    { 
+      action: 'delete-branch', 
+      branch: 'feature/optimization', 
+      message: '🧹 Step 9: Cleanup' 
+    }
   ]
 }

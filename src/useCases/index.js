@@ -11,13 +11,15 @@ import { criticalHotfix } from './criticalHotfix'
 import { releaseCandidateFlow } from './releaseCandidateFlow'
 import { longRunningFeature } from './longRunningFeature'
 import { trunkBasedDev } from './trunkBasedDev'
+import { stagingProductionDeploy } from './stagingProductionDeploy'
 
 export const realWorldUseCases = [
   sprintDevelopment,
   criticalHotfix,
   releaseCandidateFlow,
   longRunningFeature,
-  trunkBasedDev
+  trunkBasedDev,
+  stagingProductionDeploy
 ]
 
 // Export categories
@@ -34,6 +36,7 @@ export { criticalHotfix } from './criticalHotfix'
 export { releaseCandidateFlow } from './releaseCandidateFlow'
 export { longRunningFeature } from './longRunningFeature'
 export { trunkBasedDev } from './trunkBasedDev'
+export { stagingProductionDeploy } from './stagingProductionDeploy'
 
 // Categorized use cases for UI
 export const useCasesByCategory = {

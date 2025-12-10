@@ -33,7 +33,8 @@
     "previous": "Previous",
     "next": "Next",
     "play": "Play",
-    "pause": "Pause"
+    "pause": "Pause",
+    "step": "Step"
   },
   "branches": {
     "main": "Production-ready code",
@@ -47,5 +48,99 @@
     "en": "English",
     "vi": "Tiếng Việt",
     "ja": "日本語"
+  },
+  "useCases": {
+    "firstFeatureBranch": {
+      "title": "First Feature Branch",
+      "description": "Learn the basics: create a branch, make changes, and merge back"
+    },
+    "saveYourWork": {
+      "title": "Save Your Work",
+      "description": "Make multiple commits to save your progress as you work"
+    },
+    "undoLastCommit": {
+      "title": "Undo Last Commit",
+      "description": "Made a mistake? Learn how to undo and redo your last commit"
+    },
+    "switchBetweenTasks": {
+      "title": "Switch Between Tasks",
+      "description": "Learn to work on multiple things by switching branches"
+    },
+    "firstPullRequest": {
+      "title": "Your First Pull Request",
+      "description": "The complete workflow: branch → commits → PR → review → merge"
+    },
+    "syncWithTeam": {
+      "title": "Sync with Team",
+      "description": "Pull latest changes from develop and resolve conflicts"
+    },
+    "codeReviewCycle": {
+      "title": "Code Review Cycle",
+      "description": "Address PR feedback with additional commits until approved"
+    },
+    "featureBranchCleanup": {
+      "title": "Feature Branch Cleanup",
+      "description": "Squash messy commits into clean history before merge"
+    },
+    "bugFoundInPR": {
+      "title": "Bug Found in PR",
+      "description": "QA or reviewer finds a bug during PR - fix and update"
+    },
+    "parallelWork": {
+      "title": "Parallel Work",
+      "description": "Two features developed simultaneously - merge order matters"
+    },
+    "cherryPickFix": {
+      "title": "Cherry Pick Fix",
+      "description": "Apply a specific commit to multiple branches without full merge"
+    },
+    "rebaseVsMerge": {
+      "title": "Rebase vs Merge",
+      "description": "Use interactive rebase for clean, linear history"
+    },
+    "monorepoRelease": {
+      "title": "Monorepo Release",
+      "description": "Coordinate releases across multiple packages in a monorepo"
+    },
+    "rollbackStrategy": {
+      "title": "Rollback Strategy",
+      "description": "Production deploy failed - revert, analyze, and fix properly"
+    },
+    "branchProtection": {
+      "title": "Branch Protection",
+      "description": "Enforce code quality with protected branches and required reviews"
+    },
+    "sprintDevelopment": {
+      "title": "Sprint Development Cycle",
+      "description": "A complete 2-week sprint with multiple developers working on features"
+    },
+    "criticalHotfix": {
+      "title": "Critical Production Hotfix",
+      "description": "Production bug discovered - urgent fix needed while features continue"
+    },
+    "releaseCandidateFlow": {
+      "title": "Release Candidate Flow",
+      "description": "QA testing release candidates, finding bugs, multiple RC iterations"
+    },
+    "longRunningFeature": {
+      "title": "Long-Running Feature Sync",
+      "description": "Large feature taking 3+ weeks - must sync with develop regularly"
+    },
+    "trunkBasedDev": {
+      "title": "Trunk-Based Development",
+      "description": "Modern approach: short-lived branches, frequent integration, feature flags"
+    },
+    "stagingproductiondeploy": {
+      "title": "Staging & Production Deploy",
+      "description": "Complete deployment workflow: staging → test → production"
+    }
+  },
+  "results": {
+    "createBranch": "You now have a separate workspace called \"{branch}\". Any changes you make here won't affect other branches until you merge them.",
+    "commit": "Your changes are now saved as a permanent snapshot. Think of it like saving a checkpoint in a game - you can always come back to this point.",
+    "merge": "The code from \"{from}\" has been combined into \"{to}\". Both sets of changes now exist together in one place.",
+    "deleteBranch": "The branch \"{branch}\" has been removed. This is like cleaning up after finishing a task - the work is done and merged.",
+    "tag": "Version \"{tag}\" is now marked in history. This makes it easy to find and reference this exact point later.",
+    "default": "This step updates your repository."
   }
 }

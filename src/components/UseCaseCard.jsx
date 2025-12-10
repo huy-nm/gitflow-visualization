@@ -3,7 +3,20 @@
 // Note: For complex multi-layer gradients or masks, might simplify or use style props if needed, 
 // but Tailwind can handle most via utilities.
 
+import { useTranslation } from '../i18n'
+
 function UseCaseCard({ useCase, isActive, onClick }) {
+  const { t } = useTranslation()
+  
+  // Get translated use case title and description
+  const useCaseId = useCase.id.replace(/-/g, '').replace(/([A-Z])/g, (m) => m.toLowerCase())
+  const translatedTitle = t(`useCases.${useCaseId}.title`) !== `useCases.${useCaseId}.title` 
+    ? t(`useCases.${useCaseId}.title`) 
+    : useCase.title
+  const translatedDescription = t(`useCases.${useCaseId}.description`) !== `useCases.${useCaseId}.description`
+    ? t(`useCases.${useCaseId}.description`)
+    : useCase.description
+
   return (
     <button 
       className={`
@@ -29,16 +42,16 @@ function UseCaseCard({ useCase, isActive, onClick }) {
       
       <div className="flex-1 z-10">
         <h3 className="m-0 mb-2 text-lg font-bold text-[var(--text-primary)] tracking-tight">
-          {useCase.title}
+          {translatedTitle}
         </h3>
         <p className="m-0 text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3">
-          {useCase.description}
+          {translatedDescription}
         </p>
       </div>
       
       <div className="flex items-center justify-between mt-auto z-10 w-full">
         <span className="text-xs font-semibold text-ctp-blue bg-blue-400/10 px-3 py-1.5 rounded-xl transition-all duration-300 group-hover:bg-ctp-blue group-hover:text-ctp-base">
-          {useCase.steps.length} steps
+          {useCase.steps.length} {t('panel.step').toLowerCase()}s
         </span>
       </div>
     </button>
@@ -46,3 +59,4 @@ function UseCaseCard({ useCase, isActive, onClick }) {
 }
 
 export default UseCaseCard
+

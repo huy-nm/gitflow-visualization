@@ -5,10 +5,28 @@ export const ciOnPush = {
   icon: '🚀',
   description: 'Triggers linting and unit tests on every push to feature branches',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/ci-demo', message: 'Start feature' },
-    { action: 'commit', branch: 'feature/ci-demo', message: 'Add functions (Triggers CI)' },
-    { action: 'commit', branch: 'feature/ci-demo', message: 'Fix lint errors (Triggers CI again)' },
-    { action: 'merge', from: 'feature/ci-demo', to: 'develop', message: 'Merge to develop' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/ci-demo', 
+      message: '🌱 Step 1: Start feature' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/ci-demo', 
+      message: '⚙️ Step 2: Push commit -> CI Starts...' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/ci-demo', 
+      message: '✅ Step 3: Fix lint error -> CI Passes' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/ci-demo', 
+      to: 'develop', 
+      message: '🚀 Step 4: Merge to develop' 
+    }
   ]
 }
 
@@ -18,11 +36,33 @@ export const ciOnPR = {
   icon: '👀',
   description: 'Runs strict checks only when a Pull Request is opened',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/pr-checks', message: 'Start feature' },
-    { action: 'commit', branch: 'feature/pr-checks', message: 'Work in progress' },
-    { action: 'commit', branch: 'feature/pr-checks', message: 'Complete feature' },
-    { action: 'commit', branch: 'feature/pr-checks', message: 'Open PR (Triggers Checks)' },
-    { action: 'merge', from: 'feature/pr-checks', to: 'develop', message: 'Merge PR' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/pr-checks', 
+      message: '🌱 Step 1: Start feature' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/pr-checks', 
+      message: '💻 Step 2: Work in progress (Local)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/pr-checks', 
+      message: '💻 Step 3: Complete feature (Local)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/pr-checks', 
+      message: '📝 Step 4: Open PR -> CI Checks Triggered!' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/pr-checks', 
+      to: 'develop', 
+      message: '✅ Step 5: CI Passed -> Merge PR' 
+    }
   ]
 }
 
@@ -32,10 +72,28 @@ export const lintCheck = {
   icon: '🧹',
   description: 'Automated code style checking and formatting',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/style-fix', message: 'Start fix' },
-    { action: 'commit', branch: 'feature/style-fix', message: 'Add code with messy warnings' },
-    { action: 'commit', branch: 'feature/style-fix', message: 'Auto-format runs (Commit from CI) ' },
-    { action: 'merge', from: 'feature/style-fix', to: 'develop', message: 'Merge clean code' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/style-fix', 
+      message: '🌱 Step 1: Start feature' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/style-fix', 
+      message: '⚠️ Step 2: Commit messy code (Lint Warning)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/style-fix', 
+      message: '🤖 Step 3: CI Auto-fixer runs (Formatted)' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/style-fix', 
+      to: 'develop', 
+      message: '✅ Step 4: Merge Clean Code' 
+    }
   ]
 }
 
@@ -45,10 +103,28 @@ export const unitTests = {
   icon: '🧪',
   description: 'Running Jest/Vitest test suites to ensure logic correctness',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/calc-logic', message: 'New calculation logic' },
-    { action: 'commit', branch: 'feature/calc-logic', message: 'Add impl (Tests Fail) ❌' },
-    { action: 'commit', branch: 'feature/calc-logic', message: 'Fix logic (Tests Pass) ✅' },
-    { action: 'merge', from: 'feature/calc-logic', to: 'develop', message: 'Merge tested code' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/calc-logic', 
+      message: '🌱 Step 1: New Calculation Feature' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/calc-logic', 
+      message: '❌ Step 2: Commit Impl -> TESTS FAIL' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/calc-logic', 
+      message: '✅ Step 3: Fix Logic -> TESTS PASS' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/calc-logic', 
+      to: 'develop', 
+      message: '🚀 Step 4: Merge Tested Code' 
+    }
   ]
 }
 
@@ -58,10 +134,28 @@ export const securityAudit = {
   icon: '🔒',
   description: 'Scanning dependencies for vulnerabilities',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/deps-upgrade', message: 'Upgrade libs' },
-    { action: 'commit', branch: 'feature/deps-upgrade', message: 'Update package.json (Audit triggers)' },
-    { action: 'commit', branch: 'feature/deps-upgrade', message: 'Fix vulnerabilities (Audit pass)' },
-    { action: 'merge', from: 'feature/deps-upgrade', to: 'develop', message: 'Merge secure deps' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/deps-upgrade', 
+      message: '🌱 Step 1: Upgrade Libraries' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/deps-upgrade', 
+      message: '🚨 Step 2: Update lockfile (Security Audit: High Severity!)' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/deps-upgrade', 
+      message: '✅ Step 3: Apply Patches (Audit Passed)' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/deps-upgrade', 
+      to: 'develop', 
+      message: '🔒 Step 4: Merge Secure Deps' 
+    }
   ]
 }
 
@@ -71,9 +165,27 @@ export const buildVerify = {
   icon: '🏗️',
   description: 'Checking if the application compiles/builds successfully',
   steps: [
-    { action: 'create-branch', from: 'develop', to: 'feature/ui-update', message: 'UI changes' },
-    { action: 'commit', branch: 'feature/ui-update', message: 'Add components (Build runs)' },
-    { action: 'commit', branch: 'feature/ui-update', message: 'Fix build error' },
-    { action: 'merge', from: 'feature/ui-update', to: 'develop', message: 'Merge' }
+    { 
+      action: 'create-branch', 
+      from: 'develop', 
+      to: 'feature/ui-update', 
+      message: '🌱 Step 1: UI Changes' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/ui-update', 
+      message: '🏗️ Step 2: Commit -> Build runs...' 
+    },
+    { 
+      action: 'commit', 
+      branch: 'feature/ui-update', 
+      message: '✅ Step 3: Fix syntax error -> Build Succeeded' 
+    },
+    { 
+      action: 'merge', 
+      from: 'feature/ui-update', 
+      to: 'develop', 
+      message: '🚀 Step 4: Merge' 
+    }
   ]
 }
