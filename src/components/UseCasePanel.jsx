@@ -1,9 +1,18 @@
-
+import { useState } from 'react'
 import GitFlowVisualizer from './GitFlowVisualizer'
 import { useTranslation } from '../i18n'
 
 function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChange, onReset, onBack, onStepComplete }) {
   const { t } = useTranslation()
+// ... (rest of UseCasePanel)
+
+// ...
+
+// Restore Usage of TerminalBlock in render:
+// (I will do this in a separate chunk to be precise, or I can do it in one go if I identify the lines correctly.)
+
+// Wait, replace_file_content cannot handle multiple non-contiguous chunks unless I use multi_replace.
+// I will use multi_replace_file_content.
   
   // Get translated use case title and description
   const useCaseId = useCase.id.replace(/-/g, '').replace(/([A-Z])/g, (m) => m.toLowerCase())
@@ -88,9 +97,7 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
                 </h3>
               </div>
               <div className="pl-8">
-                <code className="block font-mono text-sm text-ctp-green bg-[var(--bg-tertiary)] px-4 py-3 rounded-xl border border-[var(--border-color)] shadow-sm">
-                  {getGitCommand(useCase.steps[currentStep])}
-                </code>
+                <TerminalBlock command={getGitCommand(useCase.steps[currentStep])} />
               </div>
             </div>
 
@@ -116,24 +123,18 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
                     Verify
                   </h3>
                 </div>
-                <div className="ml-8 p-4 rounded-xl bg-ctp-green/5 border border-ctp-green/10">
-                  <div className="flex flex-col gap-3">
-                    <div>
-                      <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                        Run:
-                      </span>
-                      <code className="font-mono text-xs text-[var(--text-primary)] bg-white/50 dark:bg-black/20 px-2 py-1 rounded inline-block">
-                        {getVerificationInfo(useCase.steps[currentStep]).command}
-                      </code>
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider block mb-1">
-                        Expect:
-                      </span>
-                      <span className="text-sm text-[var(--text-secondary)]">
-                        {getVerificationInfo(useCase.steps[currentStep]).expectation}
-                      </span>
-                    </div>
+                <div className="pl-8">
+                  <TerminalBlock 
+                    label="Run:"
+                    command={getVerificationInfo(useCase.steps[currentStep]).command}
+                  />
+                  <div className="mt-3 p-3 rounded-lg bg-ctp-green/5 border border-ctp-green/10">
+                    <span className="text-xs font-bold text-ctp-green uppercase tracking-wider block mb-1">
+                      Expect:
+                    </span>
+                    <span className="text-sm text-[var(--text-secondary)]">
+                      {getVerificationInfo(useCase.steps[currentStep]).expectation}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -264,4 +265,68 @@ function getVerificationInfo(step) {
     default:
       return null
   }
+}
+
+const TerminalBlock = ({ command, label }) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    if (!command) return
+    try {
+      await navigator.clipboard.writeText(command)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy', err)
+    }
+  }
+
+  return (
+    <div className="group relative my-2">
+      {label && (
+        <label className="block text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1.5 ml-1">
+          {label}
+        </label>
+      )}
+      <div className="relative group/block">
+        <div className="relative font-mono text-sm bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:border-ctp-blue/30 hover:shadow-md">
+          {/* Header/Controls */}
+          <div className="flex items-center justify-between px-4 py-3 pr-12">
+            <code className="text-[var(--text-primary)] block overflow-x-auto scrollbar-none whitespace-pre-wrap break-all font-bold leading-relaxed tracking-tight">
+              <span className="text-ctp-blue mr-2.5 select-none font-extrabold">$</span>
+              {command || ''}
+            </code>
+          </div>
+        </div>
+
+        {/* Copy Button - Floating */}
+        <button
+          onClick={handleCopy}
+          className="absolute top-1/2 -translate-y-1/2 right-2 p-2 rounded-lg bg-transparent text-[var(--text-secondary)] hover:text-ctp-blue hover:bg-ctp-blue/10 hover:scale-105 transition-all duration-200 cursor-pointer z-10"
+          type="button"
+          title="Copy"
+        >
+          {copied ? (
+            <span className="block text-ctp-green text-base leading-none font-bold animate-in zoom-in spin-in-90 duration-300">✓</span>
+          ) : (
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              className="block"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          )}
+        </button>
+      </div>
+    </div>
+  )
 }
