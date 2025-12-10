@@ -9,8 +9,7 @@ import UseCaseView from './pages/UseCaseView'
 function App() {
   const { t, language, setLanguage } = useTranslation()
   const [showLegend, setShowLegend] = useState(false)
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false)
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
 
@@ -39,50 +38,31 @@ function App() {
           {/* Language Switcher */}
           <div className="relative">
             <button 
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-mauve hover:text-ctp-mauve hover:-translate-y-0.5 shadow-sm hover:shadow-md ${showLanguageMenu ? '!border-ctp-mauve !text-ctp-mauve bg-[var(--bg-card-hover)]' : ''}`}
-              onClick={() => setShowLanguageMenu(!showLanguageMenu)} 
-              title="Change Language"
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-transparent text-xl transition-all hover:bg-[var(--bg-card-hover)] hover:scale-105 cursor-pointer border-none"
+              onClick={() => {
+                const currentIndex = LANGUAGES.findIndex(l => l.code === language)
+                const nextIndex = (currentIndex + 1) % LANGUAGES.length
+                setLanguage(LANGUAGES[nextIndex].code)
+              }} 
+              title={`Switch Language (${LANGUAGES.find(l => l.code === language)?.name})`}
             >
-              {LANGUAGES.find(l => l.code === language)?.flag} {LANGUAGES.find(l => l.code === language)?.name}
+              {LANGUAGES.find(l => l.code === language)?.flag}
             </button>
-            
-            {/* Language Menu */}
-            {showLanguageMenu && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
-                {LANGUAGES.map(lang => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLanguage(lang.code)
-                      setShowLanguageMenu(false)
-                    }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-left border-none bg-transparent cursor-pointer transition-all ${
-                      language === lang.code 
-                        ? 'bg-ctp-mauve/20 text-ctp-mauve font-semibold' 
-                        : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
-                    }`}
-                  >
-                    <span className="text-xl">{lang.flag}</span>
-                    <span>{lang.name}</span>
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
           
           {/* Branch Types */}
           <div className="relative">
             <button 
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all hover:bg-[var(--bg-card-hover)] hover:border-ctp-blue hover:text-ctp-blue hover:-translate-y-0.5 shadow-sm hover:shadow-md ${showLegend ? '!border-ctp-blue !text-ctp-blue bg-[var(--bg-card-hover)]' : ''}`}
+              className={`flex items-center justify-center w-10 h-10 rounded-xl bg-transparent text-[var(--text-secondary)] transition-all hover:bg-[var(--bg-card-hover)] hover:text-ctp-blue hover:scale-105 ${showLegend ? '!text-ctp-blue bg-[var(--bg-card-hover)]' : ''}`}
               onClick={() => setShowLegend(!showLegend)} 
-              title="Show Branch Types"
+              title={t('app.branchTypes')}
             >
-              {t('app.branchTypes')} ℹ️
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
             </button>
             
             {/* Legend Popover */}
             {showLegend && (
-              <div className="absolute right-0 top-full mt-3 w-80 bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl shadow-xl p-5 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+              <div className="absolute right-0 top-full mt-3 w-80 bg-white/95 dark:bg-[#1e1e2e]/95 backdrop-blur-2xl border border-[var(--glass-border)] rounded-2xl shadow-2xl p-5 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-color)]">
                   <h3 className="m-0 text-base font-bold text-[var(--text-primary)]">{t('app.branchTypes')}</h3>
                   <button 
@@ -93,45 +73,68 @@ function App() {
                   </button>
                 </div>
                 <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-green text-ctp-green"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">main</strong>
+                  {/* Main */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-green/10 border border-ctp-green/20 hover:border-ctp-green/50 hover:shadow-[0_0_15px_-5px_var(--ctp-green)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-green text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-green font-bold">main</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.main')}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-blue text-ctp-blue"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">develop</strong>
+
+                  {/* Develop */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-blue/10 border border-ctp-blue/20 hover:border-ctp-blue/50 hover:shadow-[0_0_15px_-5px_var(--ctp-blue)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-blue text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-blue font-bold">develop</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.develop')}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-lavender text-ctp-lavender"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">feature/*</strong>
+
+                  {/* Feature */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-lavender/10 border border-ctp-lavender/20 hover:border-ctp-lavender/50 hover:shadow-[0_0_15px_-5px_var(--ctp-lavender)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-lavender text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3v12"></path><circle cx="18" cy="6" r="3"></circle><path d="M6 15l12-12"></path></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-lavender font-bold">feature/*</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.feature')}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-mauve text-ctp-mauve"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">release/*</strong>
+
+                  {/* Release */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-mauve/10 border border-ctp-mauve/20 hover:border-ctp-mauve/50 hover:shadow-[0_0_15px_-5px_var(--ctp-mauve)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-mauve text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-mauve font-bold">release/*</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.release')}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-red text-ctp-red"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">hotfix/*</strong>
+
+                  {/* Hotfix */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-red/10 border border-ctp-red/20 hover:border-ctp-red/50 hover:shadow-[0_0_15px_-5px_var(--ctp-red)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-red text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-red font-bold">hotfix/*</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.hotfix')}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-active)] transition-all">
-                    <div className="w-4 h-4 rounded-md shadow-[0_0_10px_currentColor] shrink-0 bg-ctp-peach text-ctp-peach"></div>
-                    <div className="flex flex-col gap-0.5">
-                      <strong className="font-mono text-sm text-[var(--text-primary)]">bugfix/*</strong>
+
+                  {/* Bugfix */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ctp-peach/10 border border-ctp-peach/20 hover:border-ctp-peach/50 hover:shadow-[0_0_15px_-5px_var(--ctp-peach)] transition-all duration-300 group cursor-default">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-ctp-peach text-white shadow-sm group-hover:scale-110 transition-transform">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path></svg>
+                    </div>
+                    <div className="flex flex-col">
+                      <strong className="font-mono text-sm text-ctp-peach font-bold">bugfix/*</strong>
                       <span className="text-xs text-[var(--text-secondary)]">{t('branches.bugfix')}</span>
                     </div>
                   </div>
