@@ -25,7 +25,7 @@ function UseCaseCard({ useCase, isActive, onClick }) {
         group relative flex flex-col gap-4 p-6 
         bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--glass-border)] rounded-3xl 
         cursor-pointer text-left transition-all duration-400 ease-out overflow-hidden shadow-sm
-        hover:-translate-y-2 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-300/20 hover:bg-[var(--bg-card-hover)]
+        hover:-translate-y-2 hover:shadow-lg hover:shadow-blue-300/20 hover:bg-[var(--bg-card-hover)]
         ${isActive ? '!bg-[var(--bg-card-hover)] border-transparent shadow shadow-[var(--ctp-blue)] ring-1 ring-[var(--ctp-blue)]' : ''}
       `}
       onClick={onClick}
