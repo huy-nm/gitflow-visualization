@@ -133,6 +133,10 @@
     "stagingproductiondeploy": {
       "title": "Staging & Production Deploy",
       "description": "Complete deployment workflow: staging → test → production"
+    },
+    "rollbackdeployment": {
+      "title": "Rollback Deployment",
+      "description": "Rollback staging or production to previous version when issues are detected"
     }
   },
   "results": {

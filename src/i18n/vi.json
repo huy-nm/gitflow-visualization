@@ -133,6 +133,10 @@
     "stagingproductiondeploy": {
       "title": "Deploy Staging & Production",
       "description": "Quy trình deploy hoàn chỉnh: staging → test → production"
+    },
+    "rollbackdeployment": {
+      "title": "Rollback Deployment",
+      "description": "Rollback staging hoặc production về phiên bản trước khi phát hiện lỗi"
     }
   },
   "results": {

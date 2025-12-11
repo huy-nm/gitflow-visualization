@@ -25,7 +25,8 @@ import {
   Buildings,
   Flask,
   GitCommit,
-  Question
+  Question,
+  ArrowCounterClockwise
 } from '@phosphor-icons/react'
 
 export const getUseCaseIcon = (id, category) => {
@@ -51,6 +52,7 @@ export const getUseCaseIcon = (id, category) => {
     'rollback-strategy': <Rewind size={24} weight="fill" className="text-ctp-maroon" />,
     'rebase-vs-merge': <GitMerge size={24} weight="fill" className="text-ctp-teal" />,
     'cherry-pick-fix': <Cherries size={24} weight="fill" className="text-ctp-red" />,
+    'rollback-deployment': <ArrowCounterClockwise size={24} weight="fill" className="text-ctp-peach" />,
 
     // Real World
     'sprint-development': <Calendar size={24} weight="fill" className="text-ctp-blue" />,

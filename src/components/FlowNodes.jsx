@@ -18,14 +18,19 @@ const BRANCH_COLORS = {
 // Custom Commit Node
 export const CommitNode = memo(({ data }) => {
   const color = BRANCH_COLORS[data.branchType] || '#6c6f85'
-  const size = data.isMerge ? 14 : 12
+  // Use consistent container size for alignment, but different visual size for commits
+  const containerSize = 16  // Fixed container size for consistent positioning
+  const visualSize = data.isMerge ? 14 : 12
   
   return (
     <div 
       style={{ 
-        width: size,
-        height: size,
-        position: 'relative'
+        width: containerSize,
+        height: containerSize,
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
     >
       <Handle 
@@ -43,8 +48,8 @@ export const CommitNode = memo(({ data }) => {
       />
       <div 
         style={{ 
-          width: size,
-          height: size,
+          width: visualSize,
+          height: visualSize,
           borderRadius: '50%',
           background: data.isMerge ? '#eff1f5' : color,
           border: `2px solid ${color}`,
@@ -69,6 +74,7 @@ export const CommitNode = memo(({ data }) => {
     </div>
   )
 })
+
 
 CommitNode.displayName = 'CommitNode'
 

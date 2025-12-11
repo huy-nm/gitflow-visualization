@@ -58,43 +58,43 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
           </div>
 
           {/* Content Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             
             {/* Section 1: Explanation */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-0">
-              <div className="flex items-center gap-2.5 mb-3">
-                <Lightbulb size={24} weight="fill" className="text-ctp-yellow" />
-                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
+              <div className="flex items-center gap-2 mb-2">
+                <Lightbulb size={20} weight="fill" className="text-ctp-yellow" />
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.whatsHappening')}
                 </h3>
               </div>
-              <p className="text-[var(--text-secondary)] text-base leading-8 pl-8 border-l-2 border-ctp-blue/20">
+              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-7 border-l-2 border-ctp-blue/20">
                 {useCase.steps[currentStep]?.message}
               </p>
             </div>
 
             {/* Section 2: Command */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-100">
-              <div className="flex items-center gap-2.5 mb-3">
-                <Keyboard size={24} weight="fill" className="text-[var(--text-secondary)]" />
-                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
+              <div className="flex items-center gap-2 mb-2">
+                <Keyboard size={20} weight="fill" className="text-[var(--text-secondary)]" />
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.theCommand')}
                 </h3>
               </div>
-              <div className="pl-8">
+              <div className="pl-7">
                 <TerminalBlock command={getGitCommand(useCase.steps[currentStep])} />
               </div>
             </div>
 
             {/* Section 3: Result */}
             <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-200">
-              <div className="flex items-center gap-2.5 mb-3">
-                <NotePencil size={24} weight="fill" className="text-ctp-blue" />
-                <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wide">
+              <div className="flex items-center gap-2 mb-2">
+                <NotePencil size={20} weight="fill" className="text-ctp-blue" />
+                <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wide">
                   {t('panel.result')}
                 </h3>
               </div>
-              <p className="text-[var(--text-secondary)] text-base leading-8 pl-8 border-l-2 border-ctp-mauve/20">
+              <p className="text-[var(--text-secondary)] text-sm leading-7 pl-7 border-l-2 border-ctp-mauve/20">
                 {getStepResult(useCase.steps[currentStep])}
               </p>
             </div>
@@ -102,18 +102,18 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
             {/* Section 4: Verification (Conditional) */}
             {getVerificationInfo(useCase.steps[currentStep]) && (
               <div className="animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <CheckCircle size={24} weight="fill" className="text-ctp-green" />
-                  <h3 className="text-base font-bold text-ctp-green uppercase tracking-wide">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle size={20} weight="fill" className="text-ctp-green" />
+                  <h3 className="text-sm font-bold text-ctp-green uppercase tracking-wide">
                     Verify
                   </h3>
                 </div>
-                <div className="pl-8">
+                <div className="pl-7">
                   <TerminalBlock 
                     label="Run:"
                     command={getVerificationInfo(useCase.steps[currentStep]).command}
                   />
-                  <div className="mt-3 p-3 rounded-lg bg-ctp-green/5 border border-ctp-green/10">
+                  <div className="mt-2 p-2 rounded-lg bg-ctp-green/5 border border-ctp-green/10">
                     <span className="text-xs font-bold text-ctp-green uppercase tracking-wider block mb-1">
                       Expect:
                     </span>
@@ -131,8 +131,18 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
         {/* RIGHT AREA - Visualization */}
         <div className="flex-1 flex flex-col relative bg-[radial-gradient(ellipse_at_top_right,var(--bg-tertiary),transparent_70%)]">
           
-          {/* Floating Controls - Top Right */}
-          <div className="absolute top-6 right-6 z-10 flex items-center gap-2 bg-[var(--bg-card)]/90 backdrop-blur-md p-1.5 rounded-full border border-[var(--border-color)] shadow-xl transition-all hover:shadow-2xl hover:scale-105">
+          {/* Visualization Canvas */}
+          <div className="flex-1 overflow-hidden relative">
+            <GitFlowVisualizer 
+              useCase={useCase}
+              currentStep={currentStep}
+              isPlaying={isPlaying}
+              onStepComplete={onStepComplete}
+            />
+          </div>
+
+          {/* Floating Controls - Bottom Center */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-[var(--bg-card)]/90 backdrop-blur-md p-1.5 rounded-full border border-[var(--border-color)] shadow-xl transition-all hover:shadow-2xl">
             <button 
               className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-30" 
               onClick={onReset} 
@@ -165,16 +175,6 @@ function UseCasePanel({ useCase, currentStep, isPlaying, onPlayPause, onStepChan
               <CaretRight size={24} weight="bold" />
             </button>
           </div>
-
-          {/* Visualization Canvas */}
-          <div className="flex-1 overflow-hidden relative">
-            <GitFlowVisualizer 
-              useCase={useCase}
-              currentStep={currentStep}
-              isPlaying={isPlaying}
-              onStepComplete={onStepComplete}
-            />
-          </div>
         </div>
 
       </div>
@@ -187,17 +187,28 @@ export default UseCasePanel
 
 
 function getGitCommand(step) {
+  // Extract commit message from step description (after the step number and emoji)
+  const extractCommitMessage = (message) => {
+    if (!message) return 'Update code'
+    // Remove step number prefix like "🌱 Step 1: " or "💳 Step 2: "
+    const cleanMessage = message.replace(/^[^\s]+\s+Step\s+\d+:\s*/i, '')
+    // Truncate to reasonable length for commit message
+    return cleanMessage.length > 50 ? cleanMessage.substring(0, 47) + '...' : cleanMessage
+  }
+
   switch (step.action) {
     case 'create-branch':
       return `git checkout -b ${step.to}`
     case 'commit':
-      return `git commit -m "..."`
+      return `git commit -m "${extractCommitMessage(step.message)}"`
     case 'merge':
       return `git merge ${step.from}`
     case 'delete-branch':
       return `git branch -d ${step.branch}`
     case 'tag':
       return `git tag ${step.tag}`
+    case 'deploy':
+      return `deploy --env ${step.environment} --ref ${step.branch}`
     default:
       return ''
   }
@@ -215,6 +226,8 @@ function getStepResult(step) {
       return `The branch "${step.branch}" has been removed. This is like cleaning up after finishing a task - the work is done and merged, so we don't need this workspace anymore.`
     case 'tag':
       return `Version "${step.tag}" is now marked in history. This makes it easy to find and reference this exact point later, like putting a bookmark in a book.`
+    case 'deploy':
+      return `Your code from "${step.branch}" is now deployed to ${step.environment.toUpperCase()}. ${step.environment === 'production' ? 'Real users can now access these changes!' : 'QA team can now test these changes in a production-like environment.'}`
     default:
       return 'This step updates your repository.'
   }

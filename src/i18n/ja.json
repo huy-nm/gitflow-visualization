@@ -133,6 +133,10 @@
     "stagingproductiondeploy": {
       "title": "ステージング＆本番デプロイ",
       "description": "完全なデプロイフロー：ステージング → テスト → 本番"
+    },
+    "rollbackdeployment": {
+      "title": "デプロイロールバック",
+      "description": "問題が検出されたらステージングまたは本番を前のバージョンにロールバック"
     }
   },
   "results": {
