@@ -1,6 +1,6 @@
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from '../i18n'
 import { useCasesByCategory } from '../useCases'
 import UseCaseCard from '../components/UseCaseCard'
@@ -9,7 +9,15 @@ import { Plant, Sparkle, ShieldCheck, Buildings } from '@phosphor-icons/react'
 const Home = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [activeCategory, setActiveCategory] = useState('beginner')
+  const [searchParams] = useSearchParams()
+  const categoryFromUrl = searchParams.get('category')
+  const [activeCategory, setActiveCategory] = useState(() => {
+    // Check if the category from URL is valid
+    if (categoryFromUrl && useCasesByCategory[categoryFromUrl]) {
+      return categoryFromUrl
+    }
+    return 'beginner'
+  })
 
   const handleSelectUseCase = (useCase) => {
     navigate(`/use-case/${useCase.id}`)

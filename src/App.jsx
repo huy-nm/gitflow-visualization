@@ -52,7 +52,7 @@ function App() {
             // Use case view: Back button only
             <button 
               className="flex items-center justify-center w-10 h-10 text-[var(--text-secondary)] bg-transparent border border-[var(--border-color)] rounded-lg cursor-pointer transition-all hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)] hover:border-ctp-blue/50" 
-              onClick={() => navigate('/')}
+              onClick={() => navigate(`/?category=${currentUseCase.category}`)}
               title={t('panel.backToUseCases')}
             >
               <ArrowLeft size={20} weight="bold" />
